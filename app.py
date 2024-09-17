@@ -140,38 +140,71 @@ def finalizar_matriz_priorizacao_alternativas(desafioNormalAll, criteriosList, a
 
 ##### Iniciando a matriz de peso dos criterios
 def main():
-    st.title("Avaliação de Alternativas e Criterios")
+    st.title("Avaliação de Alternativas")
 
     # Solicitar o número de alternativas e critérios do usuário
     num_alternatives = st.number_input("Quantas alternativas você deseja avaliar? Inclua no mínimo 2", min_value=2, step=1)
-    num_criteria = st.number_input("Quantos critérios você deseja usar na avaliação?", min_value=2, step=1)
+    num_criteria = st.number_input("Quantos critérios você deseja usar na avaliação?", min_value=1, step=1)
 
-    # Exibir os valores inseridos pelo usuário
-    st.write(f"Você inseriu {num_alternatives} alternativas e {num_criteria} critérios.")
+    if num_criteria > 0 and num_alternatives > 0:
+        # Coletar nomes dos critérios
+        st.subheader("Nome dos Critérios")
+        criteria_names = [st.text_input(f"Informe o nome do critério {i + 1}", key=f"criteria_{i}") for i in range(num_criteria)]
 
-# Inicializar listas para armazenar os nomes
-    criteria_names = []
-    alternative_names = []
+        # Coletar nomes das alternativas
+        st.subheader("Nome das Alternativas")
+        alternative_names = [st.text_input(f"Informe o nome da alternativa {i + 1}", key=f"alternative_{i}") for i in range(num_alternatives)]
 
-    # Coletar nomes dos critérios
-    st.subheader("Nome dos Critérios")
-    for i in range(num_criteria):
-        criteria_name = st.text_input(f"Informe o nome do critério {i + 1}", key=f"criteria_{i}")
-        criteria_names.append(criteria_name)
-    
-    # Coletar nomes das alternativas
-    st.subheader("Nome das Alternativas")
-    for i in range(num_alternatives):
-        alternative_name = st.text_input(f"Informe o nome da alternativa {i + 1}", key=f"alternative_{i}")
-        alternative_names.append(alternative_name)
+        if st.button("Gerar Matriz de Comparação"):
 
-    # Exibir os valores inseridos pelo usuário
-    st.write("Critérios:")
-    st.write(criteria_names)
-    
-    st.write("Alternativas:")
-    st.write(alternative_names)
+            # Matriz de comparação par a par para critérios
+            st.subheader("Insira as Comparações Par a Par para os Critérios:")
+            matrix_criteria = get_comparison_matrix(num_criteria, criteria_names)
+            desafioData = pd.DataFrame(matrix_criteria, index=criteria_names, columns=criteria_names)
+            desafioData = desafioData.round(2)  # Arredondar para duas casas decimais
 
+            st.write("Matriz de Comparação em Pares dos Critérios:")
+            st.dataframe(desafioData)
+
+            # Normaliza dados
+            normalizandocriterio = NormalizingConsistency(desafioData)
+            st.write("Matriz de Comparação em Pares dos Critérios Normalizada:")
+            st.dataframe(normalizandocriterio)
+
+            # Teste de consistência
+            Consistencia1 = normalizandocriterio.to_numpy()
+            l, v = VV(Consistencia1)
+            st.write(f'Autovalor: {l:.2f}')
+            st.write(f'Autovetor: {np.round(v, 2)}')
+            DadosSaaty(l, Consistencia1.shape[0])
+
+            # Código para obter dados, criar e normalizar matrizes, etc
+            TabelaPesoDosCriterios = NormalizingCritera(desafioData)
+
+            st.write("Vetor de Peso dos Critérios:")
+            st.dataframe(TabelaPesoDosCriterios)
+
+            # Gráfico de colunas dos valores normalizados dos critérios
+            st.subheader("Gráfico de Peso dos Critérios")
+            fig, ax = plt.subplots(figsize=(12, 6))
+            ax.set_title("Matriz de Peso dos Critérios", fontsize=20)
+
+            # Plotando o gráfico com seaborn
+            sns.barplot(x=TabelaPesoDosCriterios.index, y=TabelaPesoDosCriterios.values, ax=ax)
+
+            # Adicionando rótulos às barras
+            for p in ax.patches:
+                height = p.get_height()
+                ax.text(p.get_x() + p.get_width() / 2, height, '{:.2f}'.format(height),
+                        ha='center', va='bottom', fontsize=10)
+
+            ax.set_xlabel('Critérios', fontsize=12)
+            ax.set_ylabel('Pesos', fontsize=12)
+            ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha='right', fontsize=12)
+            ax.tick_params(axis='y', labelsize=12)
+            plt.tight_layout()
+
+            st.pyplot(fig)
   
 
 if __name__ == "__main__":
