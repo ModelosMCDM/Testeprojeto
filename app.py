@@ -84,7 +84,6 @@ def main():
         criteria_names = [st.text_input(f"Informe o nome do critério {i + 1}", key=f"criteria_{i}") for i in range(num_criteria)]
 
         if st.button("Gerar Matriz de Comparação dos Critérios"):
-
             # Coletar comparações par a par
             st.subheader("Insira as Comparações Par a Par para os Critérios:")
             values = []
@@ -93,55 +92,59 @@ def main():
                     value = st.number_input(f"Comparação entre {criteria_names[i]} e {criteria_names[j]}", min_value=1.0, step=0.1, key=f"pair_{i}_{j}")
                     values.append(value)
 
-            if st.button("Calcular Matriz de Comparação"):
-                # Matriz de comparação par a par para critérios
-                matrix_criteria = get_comparison_matrix(num_criteria, criteria_names, values)
-                desafioData = pd.DataFrame(matrix_criteria, index=criteria_names, columns=criteria_names)
-                desafioData = desafioData.round(2)  # Arredondar para duas casas decimais
+            # Verificar se todos os campos foram preenchidos
+            if len(values) == (num_criteria * (num_criteria - 1) // 2):
+                if st.button("Calcular Matriz de Comparação"):
+                    # Matriz de comparação par a par para critérios
+                    matrix_criteria = get_comparison_matrix(num_criteria, criteria_names, values)
+                    desafioData = pd.DataFrame(matrix_criteria, index=criteria_names, columns=criteria_names)
+                    desafioData = desafioData.round(2)  # Arredondar para duas casas decimais
 
-                st.write("Matriz de Comparação em Pares dos Critérios:")
-                st.dataframe(desafioData)
+                    st.write("Matriz de Comparação em Pares dos Critérios:")
+                    st.dataframe(desafioData)
 
-                # Normaliza dados
-                normalizandocriterio = NormalizingConsistency(desafioData)
-                st.write("Matriz de Comparação em Pares dos Critérios Normalizada:")
-                st.dataframe(normalizandocriterio)
+                    # Normaliza dados
+                    normalizandocriterio = NormalizingConsistency(desafioData)
+                    st.write("Matriz de Comparação em Pares dos Critérios Normalizada:")
+                    st.dataframe(normalizandocriterio)
 
-                # Teste de consistência
-                Consistencia1 = normalizandocriterio.to_numpy()
-                l, v = VV(Consistencia1)
-                st.write(f'Autovalor: {l:.2f}')
-                st.write(f'Autovetor: {np.round(v, 2)}')
-                cr = DadosSaaty(l, Consistencia1.shape[0])
-                st.write(f'Teste de Consistência: {"Inconsistente" if cr > 0.1 else "Consistente"} (CR: {cr:.2f})')
+                    # Teste de consistência
+                    Consistencia1 = normalizandocriterio.to_numpy()
+                    l, v = VV(Consistencia1)
+                    st.write(f'Autovalor: {l:.2f}')
+                    st.write(f'Autovetor: {np.round(v, 2)}')
+                    cr = DadosSaaty(l, Consistencia1.shape[0])
+                    st.write(f'Teste de Consistência: {"Inconsistente" if cr > 0.1 else "Consistente"} (CR: {cr:.2f})')
 
-                # Código para obter dados, criar e normalizar matrizes, etc
-                TabelaPesoDosCriterios = NormalizingCritera(desafioData)
+                    # Código para obter dados, criar e normalizar matrizes, etc
+                    TabelaPesoDosCriterios = NormalizingCritera(desafioData)
 
-                st.write("Vetor de Peso dos Critérios:")
-                st.dataframe(TabelaPesoDosCriterios)
+                    st.write("Vetor de Peso dos Critérios:")
+                    st.dataframe(TabelaPesoDosCriterios)
 
-                # Gráfico de colunas dos valores normalizados dos critérios
-                st.subheader("Gráfico de Peso dos Critérios")
-                fig, ax = plt.subplots(figsize=(12, 6))
-                ax.set_title("Matriz de Peso dos Critérios", fontsize=20)
+                    # Gráfico de colunas dos valores normalizados dos critérios
+                    st.subheader("Gráfico de Peso dos Critérios")
+                    fig, ax = plt.subplots(figsize=(12, 6))
+                    ax.set_title("Matriz de Peso dos Critérios", fontsize=20)
 
-                # Plotando o gráfico com seaborn
-                sns.barplot(x=TabelaPesoDosCriterios.index, y=TabelaPesoDosCriterios['MatrizdePeso'], ax=ax)
+                    # Plotando o gráfico com seaborn
+                    sns.barplot(x=TabelaPesoDosCriterios.index, y=TabelaPesoDosCriterios['MatrizdePeso'], ax=ax)
 
-                # Adicionando rótulos às barras
-                for p in ax.patches:
-                    height = p.get_height()
-                    ax.text(p.get_x() + p.get_width() / 2, height, '{:.2f}'.format(height),
-                            ha='center', va='bottom', fontsize=10)
+                    # Adicionando rótulos às barras
+                    for p in ax.patches:
+                        height = p.get_height()
+                        ax.text(p.get_x() + p.get_width() / 2, height, '{:.2f}'.format(height),
+                                ha='center', va='bottom', fontsize=10)
 
-                ax.set_xlabel('Critérios', fontsize=12)
-                ax.set_ylabel('Pesos', fontsize=12)
-                ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha='right', fontsize=12)
-                ax.tick_params(axis='y', labelsize=12)
-                plt.tight_layout()
+                    ax.set_xlabel('Critérios', fontsize=12)
+                    ax.set_ylabel('Pesos', fontsize=12)
+                    ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha='right', fontsize=12)
+                    ax.tick_params(axis='y', labelsize=12)
+                    plt.tight_layout()
 
-                st.pyplot(fig)
+                    st.pyplot(fig)
+            else:
+                st.warning("Por favor, preencha todos os campos de comparação.")
 
 if __name__ == "__main__":
     main()
