@@ -53,8 +53,106 @@ def ReadAllSheets(fileP, sheetsP):
 
 
 #<h3 style ="color:black;text-align:center;">Abrindo dados dos decisores </h3></div>
-
 with st.container():
 # Carregar uma planilha Excel
          desafioFile = st.file_uploader("Para iniciar, clique no botão Browse files para carregar a planilha em Excel com as respostas Par a Par dos decisores. ", type="xlsx")
 
+#### Criando as funções matemáticas
+def NormalizingConsistency(dataP):
+    resultP = dataP.copy()
+    columnsP = resultP.columns.tolist()
+    for x in columnsP:
+        resultP[x] = resultP[x] / sum(resultP[x])
+    return resultP
+
+def NormalizingCritera(dataP):
+    resultP = dataP.copy()
+    columnsP = resultP.columns.tolist()
+    resultP["Csoma"] = 0
+    for x in columnsP:
+        resultP[x] = resultP[x] / sum(resultP[x])
+        resultP["Csoma"] += resultP[x]
+
+    resultP['MatrizdePeso'] = resultP["Csoma"] / len(columnsP)
+    return resultP
+
+def DadosSaaty(lamb, N):
+    ri = [0, 0, 0.58, 0.9, 1.12, 1.32, 1.35, 1.41, 1.45, 1.49, 1.52, 1.54, 1.56, 1.58, 1.59]
+    ci = (lamb - N) / (N - 1)
+    cr = ci / ri[N]
+    if cr > 0.1:
+        print('Inconsistente: %.2f' % cr)
+    else:
+        print('É Consistente: %.2f' % cr)
+
+def VV(Consistencia):
+    l, v = np.linalg.eig(Consistencia)
+    v = v.T
+    i = np.where(l == np.max(l))[0][0]
+    l = l[i]
+    v = v[i]
+    v = v / np.sum(v)
+    return np.real(l), np.real(v)
+
+def get_comparison_matrix(n, names):
+    matrix = np.zeros((n, n))
+    for i in range(n):
+        for j in range(i + 1, n):
+            print(f"O quão preferível o critério {names[i]} é em relação a {names[j]}:")
+            value = float(input("Insira o valor de comparação (de 1 a 9): "))
+            matrix[i][j] = value
+            matrix[j][i] = 1 / value
+    np.fill_diagonal(matrix, 1)  # Preencher a diagonal principal com 1
+    return matrix
+#### Encerrando as funções matemáticas
+
+##### Criando as funções para o AHP
+def exibir_tabela_comparacao_criterios(nomes, matriz):
+    df = pd.DataFrame(matriz, index=nomes, columns=nomes)
+    df = df.round(2)  # Arredondar para duas casas decimais
+    print("\nTabela de Comparação dos Critérios:")
+    print(df.to_string())
+
+def exibir_tabela_comparacao_alternativas(nomes, matriz, criterio_nome):
+    df = pd.DataFrame(matriz, index=nomes, columns=nomes)
+    df = df.round(2)  # Arredondar para duas casas decimais
+    print(f"\nTabela de Comparação das Alternativas para o critério '{criterio_nome}':")
+    print(df.to_string())
+
+def processar_matriz_alternativas(matriz, criterio_nome):
+    # Normaliza a matriz
+    normalizada = NormalizingConsistency(pd.DataFrame(matriz, columns=alternative_names, index=alternative_names))
+    print(f"\nMatriz de comparação em pares das alternativas para o critério '{criterio_nome}' normalizada:")
+    print(normalizada)
+
+    # Teste de consistência
+    print(f"\nTeste de consistência para o critério '{criterio_nome}':")
+    Consistencia = normalizada.to_numpy()
+    l, v = VV(Consistencia)
+    print('Autovalor: %.2f' % l)
+    print('Autovetor: ', np.round(v, 2))
+    DadosSaaty(l, Consistencia.shape[0])
+
+    # Vetor de peso
+    peso = NormalizingCritera(pd.DataFrame(matriz, columns=alternative_names, index=alternative_names))
+    print(f"\nVetor de peso para o critério '{criterio_nome}':")
+    print(peso)
+
+    return peso[['MatrizdePeso']]
+
+def finalizar_matriz_priorizacao_alternativas(desafioNormalAll, criteriosList, alternativasList):
+    matrizPriorizacaoAlternativas = pd.DataFrame(desafioNormalAll[0]['MatrizdePeso'])
+    matrizPriorizacaoAlternativas.columns = ['Peso dos Critérios']
+
+    for alt in alternativasList:
+        auxList = []
+        for crit in criteriosList:
+            i = criteriosList.index(crit) + 1
+            auxList.append(desafioNormalAll[i]['MatrizdePeso'][alt])
+        matrizPriorizacaoAlternativas[alt] = auxList
+
+    print("\nMatriz de Priorização de todas as alternativas:")
+    print(matrizPriorizacaoAlternativas)
+    return matrizPriorizacaoAlternativas
+
+##### Encerrando as funções para o AHP
