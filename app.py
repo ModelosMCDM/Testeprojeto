@@ -140,14 +140,37 @@ def finalizar_matriz_priorizacao_alternativas(desafioNormalAll, criteriosList, a
 
 ##### Iniciando a matriz de peso dos criterios
 def main():
-    st.title("Avaliação de Alternativas")
+    st.title("Avaliação de Alternativas e Criterios")
 
     # Solicitar o número de alternativas e critérios do usuário
     num_alternatives = st.number_input("Quantas alternativas você deseja avaliar? Inclua no mínimo 2", min_value=2, step=1)
-    num_criteria = st.number_input("Quantos critérios você deseja usar na avaliação?", min_value=1, step=1)
+    num_criteria = st.number_input("Quantos critérios você deseja usar na avaliação?", min_value=2, step=1)
 
     # Exibir os valores inseridos pelo usuário
     st.write(f"Você inseriu {num_alternatives} alternativas e {num_criteria} critérios.")
+
+# Inicializar listas para armazenar os nomes
+    criteria_names = []
+    alternative_names = []
+
+    # Coletar nomes dos critérios
+    st.subheader("Nome dos Critérios")
+    for i in range(num_criteria):
+        criteria_name = st.text_input(f"Informe o nome do critério {i + 1}", key=f"criteria_{i}")
+        criteria_names.append(criteria_name)
+    
+    # Coletar nomes das alternativas
+    st.subheader("Nome das Alternativas")
+    for i in range(num_alternatives):
+        alternative_name = st.text_input(f"Informe o nome da alternativa {i + 1}", key=f"alternative_{i}")
+        alternative_names.append(alternative_name)
+
+    # Exibir os valores inseridos pelo usuário
+    st.write("Critérios:")
+    st.write(criteria_names)
+    
+    st.write("Alternativas:")
+    st.write(alternative_names)
 
   
 
