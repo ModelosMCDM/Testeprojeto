@@ -29,6 +29,3 @@ html_temp = """
    
 </div>
 
-
-
-st.caption("Desenvolvido pela empregada Jaqueline Alves do Nascimento")
