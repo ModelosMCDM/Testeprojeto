@@ -147,14 +147,14 @@ def main():
     num_criteria = st.number_input("Quantos critérios você deseja usar na avaliação?", min_value=1, step=1)
 
     if num_criteria > 0 and num_alternatives > 0:
-        # Coletar nomes dos critérios
-        st.subheader("Nome dos Critérios")
-        criteria_names = [st.text_input(f"Informe o nome do critério {i + 1}", key=f"criteria_{i}") for i in range(num_criteria)]
-
         # Coletar nomes das alternativas
         st.subheader("Nome das Alternativas")
         alternative_names = [st.text_input(f"Informe o nome da alternativa {i + 1}", key=f"alternative_{i}") for i in range(num_alternatives)]
 
+        # Coletar nomes dos critérios
+        st.subheader("Nome dos Critérios")
+        criteria_names = [st.text_input(f"Informe o nome do critério {i + 1}", key=f"criteria_{i}") for i in range(num_criteria)]
+             
         if st.button("Gerar Matriz de Comparação"):
 
             # Matriz de comparação par a par para critérios
