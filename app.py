@@ -38,25 +38,6 @@ st.markdown(html_temp, unsafe_allow_html=True)
 
 
 
-#05
-def ReadSheetByNr(fileP, sheetsNrP):
-  sheetP = desafioSeets[sheetsNrP]
-  return pd.read_excel(fileP,sheet_name=sheetP,index_col=0)
-def ReadAllSheets(fileP, sheetsP):
-  resultP = []
-  for x in sheetsP:
-    # Lendo arquivo excel do Google Drive, por aba (sheet) utilizando Lib pandas
-    resultP.append(pd.read_excel(fileP,sheet_name=x,index_col=0))
-  return resultP
-
-
-
-
-#<h3 style ="color:black;text-align:center;">Abrindo dados dos decisores </h3></div>
-with st.container():
-# Carregar uma planilha Excel
-         desafioFile = st.file_uploader("Para iniciar, clique no botão Browse files para carregar a planilha em Excel com as respostas Par a Par dos decisores. ", type="xlsx")
-
 #### Criando as funções matemáticas
 def NormalizingConsistency(dataP):
     resultP = dataP.copy()
