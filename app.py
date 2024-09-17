@@ -19,10 +19,10 @@ initial_sidebar_state="expanded",  # Pode ser "auto", "expanded" ou "collapsed"
 
 
 html_temp = """
-<img src="https://uvagpclass.wordpress.com/wp-content/uploads/2017/11/whatsapp-image-2017-11-02-at-08-36-14.jpeg" 
-
+<img src="https://static-media.hotmart.com/d0IFT5pYRau6qyuHzfkd7_dgt6Q=/300x300/smart/filters:format(webp):background_color(white)/hotmart/product_pictures/686dcc4a-78b0-4b94-923b-c673a8ef5e75/Avatar.PNG" 
          alt="Descrição da imagem"
          style="width: 250px; height: auto;">
+
 
 <div style="text-align:center; background-color: #f0f0f0; border: 1px solid #ccc; padding: 10px;">
     <h3 style="color: black; margin-bottom: 10px;">Metodologia de apoio à decisão para manutenção inteligente, combinando abordagens multicritério</h3>
