@@ -156,3 +156,75 @@ def finalizar_matriz_priorizacao_alternativas(desafioNormalAll, criteriosList, a
     return matrizPriorizacaoAlternativas
 
 ##### Encerrando as funções para o AHP
+
+##### Iniciando a matriz de peso dos criterios
+def main():
+    global desafioData, num_alternatives, alternative_names, num_criteria, criteria_names, desafioNormalAll  # Atribui a variável ao escopo global
+    num_alternatives = int(input("Quantas alternativas você deseja avaliar? Inclua no mínimo 2 "))
+    num_criteria = int(input("Quantos critérios você deseja usar na avaliação? "))
+
+    # Nome dos critérios
+    criteria_names = []
+    for i in range(num_criteria):
+        criteria_name = input(f"Informe o nome do critério {i + 1}: ")
+        criteria_names.append(criteria_name)
+
+    # Nome das alternativas
+    alternative_names = []
+    for i in range(num_alternatives):
+        alternative_name = input(f"Informe o nome da alternativa {i + 1}: ")
+        alternative_names.append(alternative_name)
+
+    # Matriz de comparação par a par para critérios
+    print("\nInsira as comparações par a par para os critérios:")
+    matrix_criteria = get_comparison_matrix(num_criteria, criteria_names)
+    desafioData = pd.DataFrame(matrix_criteria, index=criteria_names, columns=criteria_names)
+    desafioData = desafioData.round(2)  # Arredondar para duas casas decimais
+
+    print("\nMatriz de comparação em pares dos critérios:")
+    print(desafioData)
+
+    # Normaliza dados
+    normalizandocriterio = NormalizingConsistency(desafioData)
+    print("\nMatriz de comparação em pares dos critérios normalizada:")
+    print(normalizandocriterio)
+
+    # Teste de consistência
+    print("\nTeste de consistência:")
+    Consistencia1 = normalizandocriterio.to_numpy()
+    l, v = VV(Consistencia1)
+    print('Autovalor: %.2f' % l)
+    print('Autovetor: ', np.round(v, 2))
+    DadosSaaty(l, Consistencia1.shape[0])
+
+    # Código para obter dados, criar e normalizar matrizes, etc
+    TabelaPesoDosCriterios = NormalizingCritera(desafioData)
+    desafioNormalAll.append(TabelaPesoDosCriterios)
+
+    print("\nVetor de peso dos criterios:")
+    print(TabelaPesoDosCriterios)
+
+    # Gráfico de colunas dos valores normalizados dos critérios e MatrizdePeso
+    plt.figure(figsize=(12, 6))  # largura e altura
+    plt.title("Matriz de peso dos critérios", fontsize=20)
+
+    # Plotando o gráfico com seaborn
+    ax = sns.barplot(x=TabelaPesoDosCriterios.index, y='MatrizdePeso', data=TabelaPesoDosCriterios, legend=False)
+
+    # Adicionando rótulos às barras
+    for p in ax.patches:
+        height = p.get_height()
+        ax.text(p.get_x() + p.get_width() / 2, height, '{:.2f}'.format(height),
+                ha='center', va='bottom', fontsize=10)
+
+    plt.xlabel('Critérios', fontsize=12)
+    plt.ylabel('Pesos', fontsize=12)
+    plt.xticks(rotation=45, ha='right', fontsize=12)
+    plt.yticks(fontsize=12)
+    plt.tight_layout()
+    plt.show()
+
+if __name__ == "__main__":
+    main()
+
+##### Finalizando a matriz de peso dos criterios
