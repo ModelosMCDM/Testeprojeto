@@ -140,9 +140,14 @@ def finalizar_matriz_priorizacao_alternativas(desafioNormalAll, criteriosList, a
 
 ##### Iniciando a matriz de peso dos criterios
 def main():
-    global desafioData, num_alternatives, alternative_names, num_criteria, criteria_names, desafioNormalAll  # Atribui a variável ao escopo global
-    num_alternatives = int(input("Quantas alternativas você deseja avaliar? Inclua no mínimo 2 "))
-    num_criteria = int(input("Quantos critérios você deseja usar na avaliação? "))
+    st.title("Avaliação de Alternativas")
+
+    # Solicitar o número de alternativas e critérios do usuário
+    num_alternatives = st.number_input("Quantas alternativas você deseja avaliar? Inclua no mínimo 2", min_value=2, step=1)
+    num_criteria = st.number_input("Quantos critérios você deseja usar na avaliação?", min_value=1, step=1)
+
+    # Exibir os valores inseridos pelo usuário
+    st.write(f"Você inseriu {num_alternatives} alternativas e {num_criteria} critérios.")
 
   
 
