@@ -50,7 +50,7 @@ def get_comparison_matrix(n, names, matrix_key):
 
     for i in range(n):
         for j in range(i + 1, n):
-            value = st.number_input(f"Comparação entre {names[i]} e {names[j]}",
+            value = st.number_input(f"O quão preferível a alternativa {names[i]} é em relação a {names[j]}",
                                     value=matrix[i][j] if matrix[i][j] != 0 else 1.0,
                                     min_value=1.0, max_value=9.0, step=1.0, key=f"{i}-{j}-{matrix_key}")
             matrix[i][j] = value
@@ -58,6 +58,22 @@ def get_comparison_matrix(n, names, matrix_key):
     np.fill_diagonal(matrix, 1)  # Preenche a diagonal principal com 1
     st.session_state[matrix_key] = matrix
     return matrix
+
+def finalizar_matriz_priorizacao_alternativas(desafioNormalAll, criteriosList, alternativasList):
+    matrizPriorizacaoAlternativas = pd.DataFrame(desafioNormalAll[0]['MatrizdePeso'])
+    matrizPriorizacaoAlternativas.columns = ['Peso dos Critérios']
+
+    for alt in alternativasList:
+        auxList = []
+        for crit in criteriosList:
+            i = criteriosList.index(crit) + 1
+            auxList.append(desafioNormalAll[i]['MatrizdePeso'][alt])
+        matrizPriorizacaoAlternativas[alt] = auxList
+
+    print("\nMatriz de Priorização de todas as alternativas:")
+    print(matrizPriorizacaoAlternativas)
+    return matrizPriorizacaoAlternativas
+
 
 # Função principal para o AHP
 def main():
