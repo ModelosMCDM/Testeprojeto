@@ -1,4 +1,3 @@
-Para ajustar o código fornecido para funcionar no Streamlit, você precisará fazer algumas modificações, especialmente para substituir as entradas de console por widgets do Streamlit e para exibir os gráficos e tabelas diretamente na interface do Streamlit. Aqui está uma versão ajustada do seu código:
 
 ```python
 import streamlit as st
