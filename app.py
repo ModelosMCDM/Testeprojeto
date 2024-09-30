@@ -50,7 +50,7 @@ def get_comparison_matrix(n, names, matrix_key):
 
     for i in range(n):
         for j in range(i + 1, n):
-            value = st.number_input(f"Comparação entre {names[i]} e {names[j]}",
+            value = st.number_input(f"O quão preferível o critério {names[i]} é em relação a {names[j]}",
                                     value=matrix[i][j] if matrix[i][j] != 0 else 1.0,
                                     min_value=1.0, max_value=9.0, step=1.0, key=f"{i}-{j}-{matrix_key}")
             matrix[i][j] = value
