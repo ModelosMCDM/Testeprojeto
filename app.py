@@ -62,7 +62,7 @@ def get_comparison_matrix(n, names, matrix_key):
             matrix[j][i] = 1 / value
     np.fill_diagonal(matrix, 1)  # Preenche a diagonal principal com 1
     st.session_state[matrix_key] = matrix
-    return matrix
+    return matrix[['MatrizdePeso']]
 
 def finalizar_matriz_priorizacao_alternativas(desafioNormalAll, criteriosList, alternativasList):
     matrizPriorizacaoAlternativas = pd.DataFrame(desafioNormalAll[0]['MatrizdePeso'])
