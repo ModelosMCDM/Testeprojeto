@@ -1,14 +1,4 @@
-Esse erro geralmente ocorre quando há uma variável ou função que não foi definida corretamente. Vamos revisar algumas possíveis causas e soluções:
 
-1. **Variáveis Globais**: Certifique-se de que todas as variáveis globais estão sendo definidas corretamente no início do código. No seu caso, `desafioData`, `num_alternatives`, `alternative_names`, `num_criteria`, `criteria_names`, e `desafioNormalAll` devem ser definidas globalmente.
-
-2. **Entrada de Dados**: Verifique se todas as entradas de dados estão sendo capturadas corretamente usando os widgets do Streamlit.
-
-3. **Indentação**: Certifique-se de que a indentação está correta, especialmente dentro das funções e loops.
-
-Aqui está uma versão revisada do código com algumas correções:
-
-```python
 import streamlit as st
 import numpy as np
 import pandas as pd
