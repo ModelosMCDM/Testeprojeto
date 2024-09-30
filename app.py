@@ -159,8 +159,8 @@ def main():
                     exibir_tabela_comparacao_alternativas(alternative_names, DadosCriterio, criterio_nome)
 
                     # Processar a matriz de alternativas
-                     peso_criterio = processar_matriz_alternativas(DadosCriterio, criterio_nome)                    
-                     desafioNormalAll.append(peso_criterio)
+                    peso_criterio = processar_matriz_alternativas(DadosCriterio, criterio_nome)                    
+                    desafioNormalAll.append(peso_criterio)
                 
 if __name__ == "__main__":    
     main()
