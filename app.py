@@ -119,7 +119,7 @@ def main():
                 st.subheader("Matriz de Comparação dos Critérios:")
                 matrix_criteria = get_comparison_matrix_criteria(num_criteria, criteria_names, "matrix_criteria")
                 df_criteria = pd.DataFrame(matrix_criteria, index=criteria_names, columns=criteria_names)
-                
+
                 # Botão para gerar a matriz
                 gerar_matriz = st.button("Gerar Matriz de Comparação dos Critérios")
                 
@@ -171,4 +171,4 @@ def main():
                     desafioNormalAll.append(peso_criterio)
 
 if __name__ == "__main__":
-    main()
+main()
