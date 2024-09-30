@@ -69,53 +69,61 @@ def main():
     if num_alternatives > 1 and num_criteria > 0:
         # Nome dos critérios
         st.subheader("Nome dos Critérios")
-        criteria_names = [st.text_input(f"Critério {i + 1}", key=f"criterio-{i}") for i in range(num_criteria)]
+        criteria_names = []
+        for i in range(num_criteria):
+            criteria_names.append(st.text_input(f"Critério {i + 1}", key=f"criterio-{i}"))
 
-        # Nome das alternativas
-        st.subheader("Nome das Alternativas")
-        alternative_names = [st.text_input(f"Alternativa {i + 1}", key=f"alternativa-{i}") for i in range(num_alternatives)]
+        # Verifica se todos os critérios foram preenchidos
+        if all(criteria_names):
+            # Nome das alternativas
+            st.subheader("Nome das Alternativas")
+            alternative_names = []
+            for i in range(num_alternatives):
+                alternative_names.append(st.text_input(f"Alternativa {i + 1}", key=f"alternativa-{i}"))
 
-        # Matriz de comparação par a par dos critérios
-        st.subheader("Matriz de Comparação dos Critérios:")
-        matrix_criteria = get_comparison_matrix(num_criteria, criteria_names, "matrix_criteria")
-        df_criteria = pd.DataFrame(matrix_criteria, index=criteria_names, columns=criteria_names)
+            # Verifica se todas as alternativas foram preenchidas
+            if all(alternative_names):
+                # Matriz de comparação par a par dos critérios
+                st.subheader("Matriz de Comparação dos Critérios:")
+                matrix_criteria = get_comparison_matrix(num_criteria, criteria_names, "matrix_criteria")
+                df_criteria = pd.DataFrame(matrix_criteria, index=criteria_names, columns=criteria_names)
 
-        # ** Botão para gerar a matriz ** depois das entradas
-        gerar_matriz = st.button("Gerar Matriz de Comparação dos Critérios")
+                # ** Botão para gerar a matriz ** depois das entradas
+                gerar_matriz = st.button("Gerar Matriz de Comparação dos Critérios")
 
-        if gerar_matriz:
-            # Exibe a matriz de comparação
-            st.write("Matriz de Comparação dos Critérios:")
-            st.write(df_criteria)
+                if gerar_matriz:
+                    # Exibe a matriz de comparação
+                    st.write("Matriz de Comparação dos Critérios:")
+                    st.write(df_criteria)
 
-            # Normalização e consistência
-            normalizandocriterio = NormalizingConsistency(df_criteria)
-            st.write("Matriz de Comparação Normalizada dos Critérios:")
-            st.write(normalizandocriterio)
+                    # Normalização e consistência
+                    normalizandocriterio = NormalizingConsistency(df_criteria)
+                    st.write("Matriz de Comparação Normalizada dos Critérios:")
+                    st.write(normalizandocriterio)
 
-            Consistencia1 = normalizandocriterio.to_numpy()
-            l, v = VV(Consistencia1)
-            cr = DadosSaaty(l, Consistencia1.shape[0])
-            st.write(f"Autovalor: {l:.2f}")
-            st.write(f"Autovetor: {np.round(v, 2)}")
-            st.write(f"Índice de Consistência: {cr:.2f}")
+                    Consistencia1 = normalizandocriterio.to_numpy()
+                    l, v = VV(Consistencia1)
+                    cr = DadosSaaty(l, Consistencia1.shape[0])
+                    st.write(f"Autovalor: {l:.2f}")
+                    st.write(f"Autovetor: {np.round(v, 2)}")
+                    st.write(f"Índice de Consistência: {cr:.2f}")
 
-            if cr > 0.1:
-                st.warning("A matriz é inconsistente!")
-            else:
-                st.success("A matriz é consistente!")
+                    if cr > 0.1:
+                        st.warning("A matriz é inconsistente!")
+                    else:
+                        st.success("A matriz é consistente!")
 
-            # Vetor de peso dos critérios
-            TabelaPesoDosCriterios = NormalizingCritera(df_criteria)
-            st.write("Vetor de Peso dos Critérios:")
-            st.write(TabelaPesoDosCriterios)
+                    # Vetor de peso dos critérios
+                    TabelaPesoDosCriterios = NormalizingCritera(df_criteria)
+                    st.write("Vetor de Peso dos Critérios:")
+                    st.write(TabelaPesoDosCriterios)
 
-            # Gráfico de peso dos critérios
-            st.subheader("Gráfico de Peso dos Critérios")
-            plt.figure(figsize=(10, 5))
-            ax = sns.barplot(x=TabelaPesoDosCriterios.index, y=TabelaPesoDosCriterios['MatrizdePeso'])
-            plt.xticks(rotation=45)
-            st.pyplot(plt)
+                    # Gráfico de peso dos critérios
+                    st.subheader("Gráfico de Peso dos Critérios")
+                    plt.figure(figsize=(10, 5))
+                    ax = sns.barplot(x=TabelaPesoDosCriterios.index, y=TabelaPesoDosCriterios['MatrizdePeso'])
+                    plt.xticks(rotation=45)
+                    st.pyplot(plt)
 
 if __name__ == "__main__":
     main()
