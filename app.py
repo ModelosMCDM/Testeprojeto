@@ -63,6 +63,21 @@ def get_comparison_matrix_criteria(n, criteria_names, matrix_key):
     st.session_state[matrix_key] = matrix
     return matrix
 
+def finalizar_matriz_priorizacao_alternativas(desafioNormalAll, criteriosList, alternativasList):
+    matrizPriorizacaoAlternativas = pd.DataFrame(desafioNormalAll[0]['MatrizdePeso'])
+    matrizPriorizacaoAlternativas.columns = ['Peso dos Critérios']
+
+    for alt in alternativasList:
+        auxList = []
+        for crit in criteriosList:
+            i = criteriosList.index(crit) + 1
+            auxList.append(desafioNormalAll[i]['MatrizdePeso'][alt])
+        matrizPriorizacaoAlternativas[alt] = auxList
+
+    print("\nMatriz de Priorização de todas as alternativas:")
+    print(matrizPriorizacaoAlternativas)
+    return matrizPriorizacaoAlternativas
+    
 # HTML de Cabeçalho
 html_temp = """
 <img src="https://static-media.hotmart.com/d0IFT5pYRau6qyuHzfkd7_dgt6Q=/300x300/smart/filters:format(webp):background_color(white)/hotmart/product_pictures/686dcc4a-78b0-4b94-923b-c673a8ef5e75/Avatar.PNG" 
@@ -149,11 +164,12 @@ def main():
                 alternativas_por_criterio = {}
                 for i in range(num_criteria):
                     criterio_nome = criteria_names[i]
-                    st.write(f"\nCritério {i + 1}: {criterio_nome}")
-                    matriz_alternativas = get_comparison_matrix_criteria(num_alternatives, alternative_names, f"alternatives_matrix_{i}")
-                    df_alternativas = pd.DataFrame(matriz_alternativas, index=alternative_names, columns=alternative_names)
-                    st.write(df_alternativas)
-                    alternativas_por_criterio[criterio_nome] = df_alternativas
+                    print(f"\nInsira a matriz de priorizações par a par de cada alternativa para o critério {i + 1} ({criterio_nome}):")
+                    DadosCriterio = get_comparison_matrix(num_alternatives, alternative_names)
+                    exibir_tabela_comparacao_alternativas(alternative_names, DadosCriterio, criterio_nome)
+                    # Processar a matriz de alternativas
+                    peso_criterio = processar_matriz_alternativas(DadosCriterio, criterio_nome)
+                    desafioNormalAll.append(peso_criterio)
 
 if __name__ == "__main__":
     main()
