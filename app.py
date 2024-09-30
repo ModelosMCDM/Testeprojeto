@@ -1,4 +1,14 @@
-import sys
+Esse erro geralmente ocorre quando há uma variável ou função que não foi definida corretamente. Vamos revisar algumas possíveis causas e soluções:
+
+1. **Variáveis Globais**: Certifique-se de que todas as variáveis globais estão sendo definidas corretamente no início do código. No seu caso, `desafioData`, `num_alternatives`, `alternative_names`, `num_criteria`, `criteria_names`, e `desafioNormalAll` devem ser definidas globalmente.
+
+2. **Entrada de Dados**: Verifique se todas as entradas de dados estão sendo capturadas corretamente usando os widgets do Streamlit.
+
+3. **Indentação**: Certifique-se de que a indentação está correta, especialmente dentro das funções e loops.
+
+Aqui está uma versão revisada do código com algumas correções:
+
+```python
 import streamlit as st
 import numpy as np
 import pandas as pd
@@ -93,6 +103,8 @@ def finalizar_matriz_priorizacao_alternativas(desafioNormalAll, criteriosList, a
 
 def main():
     global desafioData, num_alternatives, alternative_names, num_criteria, criteria_names, desafioNormalAll
+    desafioNormalAll = []
+    
     st.title("Análise de Decisão Multicritério")
     
     num_alternatives = st.number_input("Quantas alternativas você deseja avaliar? Inclua no mínimo 2", min_value=2, step=1)
@@ -158,14 +170,14 @@ def main():
     soma_ponderada = {}
     for alternativa in alternative_names:
         soma_ponderada[alternativa] = np.sum(matrizPriorizacaoAlternativas[alternativa].values * peso_dos_criterios)
-    soma_ponderada_series = pd.Series(soma_ponderada, name='soma')
-    matrizPriorizacaoAlternativas = pd.concat([matrizPriorizacaoAlternativas, soma_ponderada_series.to_frame().T])
-    matrizPriorizacaoAlternativas = matrizPriorizacaoAlternativas.drop(columns=['Peso dos Critérios'])
-    st.write(matrizPriorizacaoAlternativas)
-    st.write(type(matrizPriorizacaoAlternativas))
-    matriz_np = np.array(matrizPriorizacaoAlternativas)
-    matriz_df = pd
-    matriz_df = pd.DataFrame(matriz_np, columns=matrizPriorizacaoAlternativas.columns, index=matrizPriorizacaoAlternativas.index)
+        soma_ponderada_series = pd.Series(soma_ponderada, name='soma')
+        matrizPriorizacaoAlternativas = pd.concat([matrizPriorizacaoAlternativas, soma_ponderada_series.to_frame().T])
+        matrizPriorizacaoAlternativas = matrizPriorizacaoAlternativas.drop(columns=['Peso dos Critérios'])
+        st.write(matrizPriorizacaoAlternativas)
+        st.write(type(matrizPriorizacaoAlternativas))
+        
+        matriz_np = np.array(matrizPriorizacaoAlternativas)
+        matriz_df = pd.DataFrame(matriz_np, columns=matrizPriorizacaoAlternativas.columns, index=matrizPriorizacaoAlternativas.index)
     
     def format_with_comma(value):
         return f"{value:.6f}".replace('.', ',')
@@ -175,3 +187,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+ 
