@@ -181,12 +181,13 @@ def main():
                     alternativas_por_criterio[criterio_nome] = TabelaPesoDasAlternativas
 
 
-
-if __name__ == "__main__":
-    main()
-    
 # Processar a matriz de alternativas
     peso_criterio = processar_matriz_alternativas(DadosCriterio, criterio_nome)
     desafioNormalAll.append(peso_criterio)
 # Finalizando a Matriz de Priorização de todas alternativas
     matrizPriorizacaoAlternativas = finalizar_matriz_priorizacao_alternativas(desafioNormalAll, criteria_names, alternative_names)
+    
+if __name__ == "__main__":
+    main()
+    
+
