@@ -61,7 +61,7 @@ def get_comparison_matrix(n, names, matrix_key):
 
 # Função principal para o AHP
 def main():
-    st.title("Avaliação de Alternativas com AHP 2")
+    st.title("Avaliação de Alternativas com AHP")
 
     num_alternatives = st.number_input("Quantas alternativas você deseja avaliar?", min_value=2, step=1)
     num_criteria = st.number_input("Quantos critérios você deseja usar?", min_value=1, step=1)
@@ -75,15 +75,16 @@ def main():
         st.subheader("Nome das Alternativas")
         alternative_names = [st.text_input(f"Alternativa {i + 1}", key=f"alternativa-{i}") for i in range(num_alternatives)]
 
-        # ** Botão para gerar a matriz **
+        # Matriz de comparação par a par dos critérios
+        st.subheader("Matriz de Comparação dos Critérios:")
+        matrix_criteria = get_comparison_matrix(num_criteria, criteria_names, "matrix_criteria")
+        df_criteria = pd.DataFrame(matrix_criteria, index=criteria_names, columns=criteria_names)
+
+        # ** Botão para gerar a matriz ** depois das entradas
         gerar_matriz = st.button("Gerar Matriz de Comparação dos Critérios")
 
         if gerar_matriz:
-            # Matriz de comparação par a par dos critérios
-            matrix_criteria = get_comparison_matrix(num_criteria, criteria_names, "matrix_criteria")
-            df_criteria = pd.DataFrame(matrix_criteria, index=criteria_names, columns=criteria_names)
-
-            # Exibe a matriz de comparação apenas após o botão ser pressionado
+            # Exibe a matriz de comparação
             st.write("Matriz de Comparação dos Critérios:")
             st.write(df_criteria)
 
