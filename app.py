@@ -181,26 +181,7 @@ def main():
                     alternativas_por_criterio[criterio_nome] = TabelaPesoDasAlternativas
 
 
-# Calculando a soma ponderada para cada coluna (alternativa)
-peso_dos_criterios = matrizPriorizacaoAlternativas['Peso dos Critérios'].values
-soma_ponderada = {}
 
-for alternativa in alternative_names:
-    soma_ponderada[alternativa] = np.sum(matrizPriorizacaoAlternativas[alternativa].values * peso_dos_criterios)
-
-# Adicionando a linha "soma" ao DataFrame
-soma_ponderada_series = pd.Series(soma_ponderada, name='soma')
-matrizPriorizacaoAlternativas = pd.concat([matrizPriorizacaoAlternativas, soma_ponderada_series.to_frame().T])
-
-# Excluindo a coluna "Peso dos Critérios"
-matrizPriorizacaoAlternativas = matrizPriorizacaoAlternativas.drop(columns=['Peso dos Critérios'])
-
-
-# Exibindo a matriz atualizada
-print(matrizPriorizacaoAlternativas)
-
-#Descobrindo o tipo da variável
-print(type(matrizPriorizacaoAlternativas))
 
 
 if __name__ == "__main__":
