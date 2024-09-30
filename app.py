@@ -80,90 +80,195 @@ html_temp = """
 """
 st.markdown(html_temp, unsafe_allow_html=True)
 
+# Criando as funções para o AHP
+def exibir_tabela_comparacao_criterios(nomes, matriz):
+    df = pd.DataFrame(matriz, index=nomes, columns=nomes)
+    df = df.round(2)  # Arredondar para duas casas decimais
+    print("\nTabela de Comparação dos Critérios:")
+    print(df.to_string())
+
+def exibir_tabela_comparacao_alternativas(nomes, matriz, criterio_nome):
+    df = pd.DataFrame(matriz, index=nomes, columns=nomes)
+    df = df.round(2)  # Arredondar para duas casas decimais
+    print(f"\nTabela de Comparação das Alternativas para o critério '{criterio_nome}':")
+    print(df.to_string())
+
+def processar_matriz_alternativas(matriz, criterio_nome):
+    # Normaliza a matriz
+    normalizada = NormalizingConsistency(pd.DataFrame(matriz, columns=alternative_names, index=alternative_names))
+    print(f"\nMatriz de comparação em pares das alternativas para o critério '{criterio_nome}' normalizada:")
+    print(normalizada)
+
+    # Teste de consistência
+    print(f"\nTeste de consistência para o critério '{criterio_nome}':")
+    Consistencia = normalizada.to_numpy()
+    l, v = VV(Consistencia)
+    print('Autovalor: %.2f' % l)
+    print('Autovetor: ', np.round(v, 2))
+    DadosSaaty(l, Consistencia.shape[0])
+
+    # Vetor de peso
+    peso = NormalizingCritera(pd.DataFrame(matriz, columns=alternative_names, index=alternative_names))
+    print(f"\nVetor de peso para o critério '{criterio_nome}':")
+    print(peso)
+
+    return peso[['MatrizdePeso']]
+
+def finalizar_matriz_priorizacao_alternativas(desafioNormalAll, criteriosList, alternativasList):
+    matrizPriorizacaoAlternativas = pd.DataFrame(desafioNormalAll[0]['MatrizdePeso'])
+    matrizPriorizacaoAlternativas.columns = ['Peso dos Critérios']
+
+    for alt in alternativasList:
+        auxList = []
+        for crit in criteriosList:
+            i = criteriosList.index(crit) + 1
+            auxList.append(desafioNormalAll[i]['MatrizdePeso'][alt])
+        matrizPriorizacaoAlternativas[alt] = auxList
+
+    print("\nMatriz de Priorização de todas as alternativas:")
+    print(matrizPriorizacaoAlternativas)
+    return matrizPriorizacaoAlternativas
+
+
+if __name__ == "__main__":
+    main()
 def main():
-    st.title("Avaliação de Alternativas")
+    global desafioData, num_alternatives, alternative_names, num_criteria, criteria_names, desafioNormalAll  # Atribui a variável ao escopo global
+    num_alternatives = int(input("Quantas alternativas você deseja avaliar? Inclua no mínimo 2 "))
+    num_criteria = int(input("Quantos critérios você deseja usar na avaliação? "))
 
-    # Solicitar o número de alternativas e critérios do usuário
-    num_alternatives = st.number_input("Quantas alternativas você deseja avaliar? Inclua no mínimo 2", min_value=2, step=1)
-    num_criteria = st.number_input("Quantos critérios você deseja usar na avaliação?", min_value=1, step=1)
+    # Nome dos critérios
+    criteria_names = []
+    for i in range(num_criteria):
+        criteria_name = input(f"Informe o nome do critério {i + 1}: ")
+        criteria_names.append(criteria_name)
 
-    if num_criteria > 0 and num_alternatives > 0:
-        # Coletar nomes das alternativas
-        st.subheader("Nome das Alternativas")
-        alternative_names = [st.text_input(f"Informe o nome da alternativa {i + 1}", key=f"alternative_{i}") for i in range(num_alternatives)]
+    # Nome das alternativas
+    alternative_names = []
+    for i in range(num_alternatives):
+        alternative_name = input(f"Informe o nome da alternativa {i + 1}: ")
+        alternative_names.append(alternative_name)
 
-        # Coletar nomes dos critérios
-        st.subheader("Nome dos Critérios")
-        criteria_names = [st.text_input(f"Informe o nome do critério {i + 1}", key=f"criteria_{i}") for i in range(num_criteria)]
+    # Matriz de comparação par a par para critérios
+    print("\nInsira as comparações par a par para os critérios:")
+    matrix_criteria = get_comparison_matrix(num_criteria, criteria_names)
+    desafioData = pd.DataFrame(matrix_criteria, index=criteria_names, columns=criteria_names)
+    desafioData = desafioData.round(2)  # Arredondar para duas casas decimais
 
-        if st.button("Gerar Matriz de Comparação dos Critérios"):
-            # Coletar comparações par a par
-            st.subheader("Insira as Comparações Par a Par para os Critérios:")
-            values = []
-            for i in range(num_criteria):
-                for j in range(i + 1, num_criteria):
-                    value = st.number_input(f"Comparação entre {criteria_names[i]} e {criteria_names[j]}", min_value=1.0, step=0.1, key=f"pair_{i}_{j}")
-                    values.append(value)
+    print("\nMatriz de comparação em pares dos critérios:")
+    print(desafioData)
 
-            # Verificar se todos os campos foram preenchidos
-            if len(values) == (num_criteria * (num_criteria - 1) // 2):
-                # Botão para calcular a matriz de comparação
-                if st.button("Calcular Matriz de Comparação"):
-                    # Matriz de comparação par a par para critérios
-                    matrix_criteria = get_comparison_matrix(num_criteria, criteria_names, values)
-                    desafioData = pd.DataFrame(matrix_criteria, index=criteria_names, columns=criteria_names)
-                    desafioData = desafioData.round(2)  # Arredondar para duas casas decimais
+    # Normaliza dados
+    normalizandocriterio = NormalizingConsistency(desafioData)
+    print("\nMatriz de comparação em pares dos critérios normalizada:")
+    print(normalizandocriterio)
 
-                    st.write("Matriz de Comparação em Pares dos Critérios:")
-                    st.dataframe(desafioData)
+    # Teste de consistência
+    print("\nTeste de consistência:")
+    Consistencia1 = normalizandocriterio.to_numpy()
+    l, v = VV(Consistencia1)
+    print('Autovalor: %.2f' % l)
+    print('Autovetor: ', np.round(v, 2))
+    DadosSaaty(l, Consistencia1.shape[0])
 
-                    # Normaliza dados
-                    normalizandocriterio = NormalizingConsistency(desafioData)
-                    st.write("Matriz de Comparação em Pares dos Critérios Normalizada:")
-                    st.dataframe(normalizandocriterio)
+    # Código para obter dados, criar e normalizar matrizes, etc
+    TabelaPesoDosCriterios = NormalizingCritera(desafioData)
+    desafioNormalAll.append(TabelaPesoDosCriterios)
 
-                    # Teste de consistência
-                    Consistencia1 = normalizandocriterio.to_numpy()
-                    l, v = VV(Consistencia1)
-                    st.write(f'Autovalor: {l:.2f}')
-                    st.write(f'Autovetor: {np.round(v, 2)}')
-                    cr = DadosSaaty(l, Consistencia1.shape[0])
-                    st.write(f'Teste de Consistência: {"Inconsistente" if cr > 0.1 else "Consistente"} (CR: {cr:.2f})')
+    print("\nVetor de peso dos criterios:")
+    print(TabelaPesoDosCriterios)
 
-                    # Código para obter dados, criar e normalizar matrizes, etc
-                    TabelaPesoDosCriterios = NormalizingCritera(desafioData)
+    # Gráfico de colunas dos valores normalizados dos critérios e MatrizdePeso
+    plt.figure(figsize=(12, 6))  # largura e altura
+    plt.title("Matriz de peso dos critérios", fontsize=20)
 
-                    st.write("Vetor de Peso dos Critérios:")
-                    st.dataframe(TabelaPesoDosCriterios)
+    # Plotando o gráfico com seaborn
+    ax = sns.barplot(x=TabelaPesoDosCriterios.index, y='MatrizdePeso', data=TabelaPesoDosCriterios, legend=False)
 
-                    # Exibir a matriz Comparação em Pares dos Critério
-                    st.write("Matriz de Comparação em Pares dos Critérios:")
-                    st.dataframe(matriz_df)
+    # Adicionando rótulos às barras
+    for p in ax.patches:
+        height = p.get_height()
+        ax.text(p.get_x() + p.get_width() / 2, height, '{:.2f}'.format(height),
+                ha='center', va='bottom', fontsize=10)
 
-                    # Gráfico de colunas dos valores normalizados dos critérios
-                    st.subheader("Gráfico de Peso dos Critérios")
-                    fig, ax = plt.subplots(figsize=(12, 6))
-                    ax.set_title("Matriz de Peso dos Critérios", fontsize=20)
+    plt.xlabel('Critérios', fontsize=12)
+    plt.ylabel('Pesos', fontsize=12)
+    plt.xticks(rotation=45, ha='right', fontsize=12)
+    plt.yticks(fontsize=12)
+    plt.tight_layout()
+    plt.show()
 
-                    # Plotando o gráfico com seaborn
-                    sns.barplot(x=TabelaPesoDosCriterios.index, y=TabelaPesoDosCriterios['MatrizdePeso'], ax=ax)
+15# Matriz de comparação par a par para alternativas para cada critério
+alternativas_por_criterio = {}  # Dicionário para armazenar as tabelas
+for i in range(num_criteria):
+    criterio_nome = criteria_names[i]
+    print(f"\nInsira a matriz de priorizações par a par de cada alternativa para o critério {i + 1} ({criterio_nome}):")
+    DadosCriterio = get_comparison_matrix(num_alternatives, alternative_names)
+    exibir_tabela_comparacao_alternativas(alternative_names, DadosCriterio, criterio_nome)
+    # Processar a matriz de alternativas
+    peso_criterio = processar_matriz_alternativas(DadosCriterio, criterio_nome)
+    desafioNormalAll.append(peso_criterio)
 
-                    # Adicionando rótulos às barras
-                    for p in ax.patches:
-                        height = p.get_height()
-                        ax.text(p.get_x() + p.get_width() / 2, height, '{:.2f}'.format(height),
-                                ha='center', va='bottom', fontsize=10)
-                    ax.set_xlabel('Critérios', fontsize=12)
-                    ax.set_ylabel('Pesos', fontsize=12)
-                    ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha='right', fontsize=12)
-                    ax.tick_params(axis='y', labelsize=12)
-                    plt.tight_layout()
+# Finalizando a Matriz de Priorização de todas alternativas
+matrizPriorizacaoAlternativas = finalizar_matriz_priorizacao_alternativas(desafioNormalAll, criteria_names, alternative_names)
 
-                    st.pyplot(fig)
+# Calculando a soma ponderada para cada coluna (alternativa)
+peso_dos_criterios = matrizPriorizacaoAlternativas['Peso dos Critérios'].values
+soma_ponderada = {}
 
-            
-            else:
-                st.warning("Por favor, preencha todos os campos de comparação.")
+for alternativa in alternative_names:
+    soma_ponderada[alternativa] = np.sum(matrizPriorizacaoAlternativas[alternativa].values * peso_dos_criterios)
+
+# Adicionando a linha "soma" ao DataFrame
+soma_ponderada_series = pd.Series(soma_ponderada, name='soma')
+matrizPriorizacaoAlternativas = pd.concat([matrizPriorizacaoAlternativas, soma_ponderada_series.to_frame().T])
+
+# Excluindo a coluna "Peso dos Critérios"
+matrizPriorizacaoAlternativas = matrizPriorizacaoAlternativas.drop(columns=['Peso dos Critérios'])
+
+
+# Exibindo a matriz atualizada
+print(matrizPriorizacaoAlternativas)
+
+
+#Descobrindo o tipo da variável
+print(type(matrizPriorizacaoAlternativas))
+
+# Convertendo a matriz para um array NumPy
+matriz_np = np.array(matrizPriorizacaoAlternativas)
+
+# Convertendo o array NumPy para um DataFrame
+matriz_df = pd.DataFrame(matriz_np, columns=matrizPriorizacaoAlternativas.columns, index=matrizPriorizacaoAlternativas.index)
+
+# Função para formatar valores com vírgulas
+def format_with_comma(value):
+    return f"{value:.6f}".replace('.', ',')
+
+# Aplicando a formatação ao DataFrame
+matriz_df_formatted = matriz_df.applymap(format_with_comma)
+
+# Imprimindo o DataFrame final
+print(matriz_df_formatted)
+
+# Extraindo a última linha do DataFrame
+ultima_linha = matriz_df_formatted.iloc[-1]
+
+# Classificando os valores da última linha
+ranking = ultima_linha.rank(ascending=False, method='min').astype(int)
+
+# Transformando o ranking em um DataFrame
+ranking_matriz_df_formatted = ranking.reset_index()
+ranking_matriz_df_formatted.columns = ['Coluna', 'Ranking']
+ranking_matriz_df_formatted = ranking_matriz_df_formatted.sort_values(by='Ranking')
+
+print(ranking_matriz_df_formatted)
+
+
+# prompt: ajuste para aparecer no ranking_matriz_df_formatted a coluna com o valor de ultima_linha ao lado na coluna Ranking
+
+ranking_matriz_df_formatted['Valor'] = ultima_linha.values
+print(ranking_matriz_df_formatted)
+
 
 if __name__ == "__main__":
     main()
