@@ -94,6 +94,7 @@ def main():
 
             # Verificar se todos os campos foram preenchidos
             if len(values) == (num_criteria * (num_criteria - 1) // 2):
+                # Botão para calcular a matriz de comparação
                 if st.button("Calcular Matriz de Comparação"):
                     # Matriz de comparação par a par para critérios
                     matrix_criteria = get_comparison_matrix(num_criteria, criteria_names, values)
@@ -135,7 +136,6 @@ def main():
                         height = p.get_height()
                         ax.text(p.get_x() + p.get_width() / 2, height, '{:.2f}'.format(height),
                                 ha='center', va='bottom', fontsize=10)
-
                     ax.set_xlabel('Critérios', fontsize=12)
                     ax.set_ylabel('Pesos', fontsize=12)
                     ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha='right', fontsize=12)
