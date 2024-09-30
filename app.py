@@ -37,11 +37,11 @@ def VV(Consistencia):
     v = v / np.sum(v)
     return np.real(l), np.real(v)
 
-# Função para gerar matriz de comparação par a par entre alternativas
-def get_comparison_matrix(n, alternative_names, matrix_key="matrix_alternatives"):
-    """ Função para gerar uma matriz de comparação par a par entre alternativas. """
+# Função para gerar matriz de comparação
+def get_comparison_matrix_criteria(n, criteria_names, matrix_key):
+    """ Função para gerar uma matriz de comparação par a par entre critérios. """
     matrix = np.zeros((n, n))
-    
+
     # Armazena o estado da matriz entre interações
     if matrix_key not in st.session_state:
         st.session_state[matrix_key] = matrix
@@ -51,13 +51,14 @@ def get_comparison_matrix(n, alternative_names, matrix_key="matrix_alternatives"
     for i in range(n):
         for j in range(i + 1, n):
             value = st.number_input(
-                f"O quão preferível a alternativa '{alternative_names[i]}' é em relação à alternativa '{alternative_names[j]}'?",
+                f"O quão preferível o critério '{criteria_names[i]}' é em relação ao critério '{criteria_names[j]}'?",
                 value=matrix[i][j] if matrix[i][j] != 0 else 1.0,
                 min_value=1.0, max_value=9.0, step=1.0,
                 key=f"{i}-{j}-{matrix_key}"
             )
             matrix[i][j] = value
             matrix[j][i] = 1 / value
+
     np.fill_diagonal(matrix, 1)  # Preenche a diagonal principal com 1
     st.session_state[matrix_key] = matrix
     return matrix
@@ -119,7 +120,7 @@ def main():
                 st.subheader("Matriz de Comparação dos Critérios:")
                 matrix_criteria = get_comparison_matrix_criteria(num_criteria, criteria_names, "matrix_criteria")
                 df_criteria = pd.DataFrame(matrix_criteria, index=criteria_names, columns=criteria_names)
-
+                
                 # Botão para gerar a matriz
                 gerar_matriz = st.button("Gerar Matriz de Comparação dos Critérios")
                 
@@ -171,4 +172,4 @@ def main():
                     desafioNormalAll.append(peso_criterio)
 
 if __name__ == "__main__":
-main()
+    main()
