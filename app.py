@@ -59,6 +59,21 @@ def get_comparison_matrix(n, names, matrix_key):
     st.session_state[matrix_key] = matrix
     return matrix
 
+html_temp = """
+<img src="https://static-media.hotmart.com/d0IFT5pYRau6qyuHzfkd7_dgt6Q=/300x300/smart/filters:format(webp):background_color(white)/hotmart/product_pictures/686dcc4a-78b0-4b94-923b-c673a8ef5e75/Avatar.PNG" 
+         alt="Descrição da imagem"
+         style="width: 50px; height: 50px;">
+<div style="text-align:center; background-color: #f0f0f0; border: 1px solid #ccc; padding: 10px;">
+    <h3 style="color: black; margin-bottom: 10px;">Metodologia de apoio à decisão para manutenção inteligente, combinando abordagens multicritério</h3>
+    <p style="color: black; margin-bottom: 10px;">AHP - Xxxxxx 3</p>
+    <p style="color: black; margin-bottom: 10px;">Modo de uso: Aplique-o para escolha entre quaisquer alternativas e critérios</p>
+    <p style="color: black; margin-bottom: 10px;">Todos os métodos funcionarão automaticamente</p>
+    <p style="color: black; margin-bottom: 10px;">Jaqueline Alves do Nascimento</p>
+</div>
+"""
+st.markdown(html_temp, unsafe_allow_html=True)
+
+
 # Função principal para o AHP
 def main():
     st.title("Avaliação de Alternativas com AHP")
