@@ -59,21 +59,6 @@ def get_comparison_matrix(n, names, matrix_key):
     st.session_state[matrix_key] = matrix
     return matrix
 
-html_temp = """
-<img src="https://static-media.hotmart.com/d0IFT5pYRau6qyuHzfkd7_dgt6Q=/300x300/smart/filters:format(webp):background_color(white)/hotmart/product_pictures/686dcc4a-78b0-4b94-923b-c673a8ef5e75/Avatar.PNG" 
-         alt="Descrição da imagem"
-         style="width: 50px; height: 50px;">
-<div style="text-align:center; background-color: #f0f0f0; border: 1px solid #ccc; padding: 10px;">
-    <h3 style="color: black; margin-bottom: 10px;">Metodologia de apoio à decisão para manutenção inteligente, combinando abordagens multicritério</h3>
-    <p style="color: black; margin-bottom: 10px;">AHP - Xxxxxx 3</p>
-    <p style="color: black; margin-bottom: 10px;">Modo de uso: Aplique-o para escolha entre quaisquer alternativas e critérios</p>
-    <p style="color: black; margin-bottom: 10px;">Todos os métodos funcionarão automaticamente</p>
-    <p style="color: black; margin-bottom: 10px;">Jaqueline Alves do Nascimento</p>
-</div>
-"""
-st.markdown(html_temp, unsafe_allow_html=True)
-
-
 # Função principal para o AHP
 def main():
     st.title("Avaliação de Alternativas com AHP")
@@ -149,11 +134,35 @@ def main():
                     st.write(f"\nCritério {i + 1}: {criterio_nome}")
                     matriz_alternativas = get_comparison_matrix(num_alternatives, alternative_names, f"alternatives_matrix_{i}")
                     df_alternativas = pd.DataFrame(matriz_alternativas, index=alternative_names, columns=alternative_names)
+                    st.write("Tabela de Comparação das Alternativas:")
                     st.write(df_alternativas)
 
-                    alternativas_por_criterio[criterio_nome] = df_alternativas
+                    # Normalizando a matriz de comparação
+                    normalizando_alternativas = NormalizingConsistency(df_alternativas)
+                    st.write(f"Matriz de comparação em pares das alternativas para o critério '{criterio_nome}' normalizada:")
+                    st.write(normalizando_alternativas)
 
-                # Aqui você pode incluir mais operações para processar as matrizes de alternativas por critério.
+                    # Teste de Consistência
+                    Consistencia_alt = normalizando_alternativas.to_numpy()
+                    l_alt, v_alt = VV(Consistencia_alt)
+                    cr_alt = DadosSaaty(l_alt, Consistencia_alt.shape[0])
+                    st.write(f"Teste de consistência para o critério '{criterio_nome}':")
+                    st.write(f"Autovalor: {l_alt:.2f}")
+                    st.write(f"Autovetor: {np.round(v_alt, 2)}")
+                    st.write(f"Índice de Consistência: {cr_alt:.2f}")
+
+                    if cr_alt > 0.1:
+                        st.warning(f"A matriz de alternativas para o critério '{criterio_nome}' é inconsistente!")
+                    else:
+                        st.success(f"A matriz de alternativas para o critério '{criterio_nome}' é consistente!")
+
+                    # Vetor de peso para o critério
+                    TabelaPesoDasAlternativas = NormalizingCritera(df_alternativas)
+                    st.write(f"Vetor de peso para o critério '{criterio_nome}':")
+                    st.write(TabelaPesoDasAlternativas)
+
+                    # Armazenando a matriz de alternativas normalizada e o vetor de peso
+                    alternativas_por_criterio[criterio_nome] = TabelaPesoDasAlternativas
 
 if __name__ == "__main__":
     main()
