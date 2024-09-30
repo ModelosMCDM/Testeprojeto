@@ -160,7 +160,7 @@ def main():
 
                     # Processar a matriz de alternativas
                      peso_criterio = processar_matriz_alternativas(DadosCriterio, criterio_nome)                    
-                desafioNormalAll.append(peso_criterio)
+                     desafioNormalAll.append(peso_criterio)
                 
 if __name__ == "__main__":    
     main()
