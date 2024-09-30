@@ -1,16 +1,3 @@
-Ajuste o codigo para corrigir esse erro 
-
-NameError: This app has encountered an error. The original error message is redacted to prevent data leaks. Full error details have been recorded in the logs (if you're on Streamlit Cloud, click on 'Manage app' in the lower right of your app).
-Traceback:
-File "/home/adminuser/venv/lib/python3.9/site-packages/streamlit/runtime/scriptrunner/script_runner.py", line 552, in _run_script
-    exec(code, module.__dict__)
-File "/mount/src/testeprojeto/app.py", line 175, in <module>
-    main()
-File "/mount/src/testeprojeto/app.py", line 168, in main
-    DadosCriterio = get_comparison_matrix(num_alternatives, alternative_names)
-
-
-Código
 import streamlit as st
 import numpy as np
 import pandas as pd
@@ -50,11 +37,11 @@ def VV(Consistencia):
     v = v / np.sum(v)
     return np.real(l), np.real(v)
 
-# Função para gerar matriz de comparação
-def get_comparison_matrix_criteria(n, criteria_names, matrix_key):
-    """ Função para gerar uma matriz de comparação par a par entre critérios. """
+# Função para gerar matriz de comparação par a par entre alternativas
+def get_comparison_matrix(n, alternative_names, matrix_key="matrix_alternatives"):
+    """ Função para gerar uma matriz de comparação par a par entre alternativas. """
     matrix = np.zeros((n, n))
-
+    
     # Armazena o estado da matriz entre interações
     if matrix_key not in st.session_state:
         st.session_state[matrix_key] = matrix
@@ -64,14 +51,13 @@ def get_comparison_matrix_criteria(n, criteria_names, matrix_key):
     for i in range(n):
         for j in range(i + 1, n):
             value = st.number_input(
-                f"O quão preferível o critério '{criteria_names[i]}' é em relação ao critério '{criteria_names[j]}'?",
+                f"O quão preferível a alternativa '{alternative_names[i]}' é em relação à alternativa '{alternative_names[j]}'?",
                 value=matrix[i][j] if matrix[i][j] != 0 else 1.0,
                 min_value=1.0, max_value=9.0, step=1.0,
                 key=f"{i}-{j}-{matrix_key}"
             )
             matrix[i][j] = value
             matrix[j][i] = 1 / value
-
     np.fill_diagonal(matrix, 1)  # Preenche a diagonal principal com 1
     st.session_state[matrix_key] = matrix
     return matrix
