@@ -4,11 +4,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# Inicializa variáveis globais
-desafioNormalAll = []  # Para armazenar as tabelas normalizadas
-alternative_names = None
-criteria_names = None
-
 # Funções Matemáticas
 def NormalizingConsistency(dataP):
     resultP = dataP.copy()
@@ -44,20 +39,28 @@ def VV(Consistencia):
     return np.real(l), np.real(v)
 
 # Função para gerar matriz de comparação
-def get_comparison_matrix(n, names):
+def get_comparison_matrix(n, names, matrix_key):
     matrix = np.zeros((n, n))
+
+    # Armazena o estado da matriz entre interações
+    if matrix_key not in st.session_state:
+        st.session_state[matrix_key] = matrix
+    else:
+        matrix = st.session_state[matrix_key]
+
     for i in range(n):
         for j in range(i + 1, n):
-            value = st.number_input(f"Comparação entre {names[i]} e {names[j]}", min_value=1.0, max_value=9.0, step=1.0)
+            value = st.number_input(f"Comparação entre {names[i]} e {names[j]}",
+                                    value=matrix[i][j] if matrix[i][j] != 0 else 1.0,
+                                    min_value=1.0, max_value=9.0, step=1.0, key=f"{i}-{j}-{matrix_key}")
             matrix[i][j] = value
             matrix[j][i] = 1 / value
     np.fill_diagonal(matrix, 1)  # Preenche a diagonal principal com 1
+    st.session_state[matrix_key] = matrix
     return matrix
 
 # Função principal para o AHP
 def main():
-    global alternative_names, criteria_names, desafioNormalAll  # Variáveis globais
-
     st.title("Avaliação de Alternativas com AHP")
 
     num_alternatives = st.number_input("Quantas alternativas você deseja avaliar?", min_value=2, step=1)
@@ -66,15 +69,15 @@ def main():
     if num_alternatives > 1 and num_criteria > 0:
         # Nome dos critérios
         st.subheader("Nome dos Critérios")
-        criteria_names = [st.text_input(f"Critério {i + 1}") for i in range(num_criteria)]
+        criteria_names = [st.text_input(f"Critério {i + 1}", key=f"criterio-{i}") for i in range(num_criteria)]
 
         # Nome das alternativas
         st.subheader("Nome das Alternativas")
-        alternative_names = [st.text_input(f"Alternativa {i + 1}") for i in range(num_alternatives)]
+        alternative_names = [st.text_input(f"Alternativa {i + 1}", key=f"alternativa-{i}") for i in range(num_alternatives)]
 
         if st.button("Gerar Matriz de Comparação dos Critérios"):
             # Matriz de comparação par a par dos critérios
-            matrix_criteria = get_comparison_matrix(num_criteria, criteria_names)
+            matrix_criteria = get_comparison_matrix(num_criteria, criteria_names, "matrix_criteria")
             df_criteria = pd.DataFrame(matrix_criteria, index=criteria_names, columns=criteria_names)
 
             st.write("Matriz de Comparação dos Critérios:")
@@ -99,8 +102,6 @@ def main():
 
             # Vetor de peso dos critérios
             TabelaPesoDosCriterios = NormalizingCritera(df_criteria)
-            desafioNormalAll.append(TabelaPesoDosCriterios)
-
             st.write("Vetor de Peso dos Critérios:")
             st.write(TabelaPesoDosCriterios)
 
