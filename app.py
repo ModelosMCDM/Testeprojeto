@@ -140,23 +140,20 @@ def main():
                     plt.xticks(rotation=45)
                     st.pyplot(plt)
 
-# Função para montagem da matriz de priorizações par a par de cada alternativa
-def main():
-    st.title("montagem da matriz de priorizações par a par de cada alternativa")
+                # Função para montagem da matriz de priorizações par a par de cada alternativa
+                st.subheader("Montagem da matriz de priorizações par a par de cada alternativa por critério")
+                alternativas_por_criterio = {}
 
-    alternativas_por_criterio = {}  # Dicionário para armazenar as tabelas
-    for i in range(num_criteria):
-        criterio_nome = criteria_names[i]
-        print(f"\nInsira a matriz de priorizações par a par de cada alternativa para o critério {i + 1} ({criterio_nome}):")
-        DadosCriterio = get_comparison_matrix(num_alternatives, alternative_names)
-        exibir_tabela_comparacao_alternativas(alternative_names, DadosCriterio, criterio_nome)
-        # Processar a matriz de alternativas
-        peso_criterio = processar_matriz_alternativas(DadosCriterio, criterio_nome)
-        desafioNormalAll.append(peso_criterio)
-    
-    # Finalizando a Matriz de Priorização de todas alternativas
-    matrizPriorizacaoAlternativas = finalizar_matriz_priorizacao_alternativas(desafioNormalAll, criteria_names, alternative_names)
+                for i in range(num_criteria):
+                    criterio_nome = criteria_names[i]
+                    st.write(f"\nCritério {i + 1}: {criterio_nome}")
+                    matriz_alternativas = get_comparison_matrix(num_alternatives, alternative_names, f"alternatives_matrix_{i}")
+                    df_alternativas = pd.DataFrame(matriz_alternativas, index=alternative_names, columns=alternative_names)
+                    st.write(df_alternativas)
 
+                    alternativas_por_criterio[criterio_nome] = df_alternativas
+
+                # Aqui você pode incluir mais operações para processar as matrizes de alternativas por critério.
 
 if __name__ == "__main__":
     main()
