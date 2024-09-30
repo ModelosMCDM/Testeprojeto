@@ -180,10 +180,7 @@ def main():
                     # Armazenando a matriz de alternativas normalizada e o vetor de peso
                     alternativas_por_criterio[criterio_nome] = TabelaPesoDasAlternativas
 
-                    # Gerando a matriz de priorização final para todas as alternativas
-                    st.subheader("Matriz de Priorização de Todas as Alternativas")
-                    matrizPriorizacaoAlternativas = finalizar_matriz_priorizacao_alternativas(desafioNormalAll, criteria_names, alternative_names)
-                    st.write(matrizPriorizacaoAlternativas)
+
 
 if __name__ == "__main__":
     main()
