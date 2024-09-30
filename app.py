@@ -184,8 +184,6 @@ def main():
                     # Armazenando a matriz de alternativas normalizada e o vetor de peso
                     alternativas_por_criterio[criterio_nome] = TabelaPesoDasAlternativas
 
-                    st.subheader("Finalizando a Matriz de Priorização de todas alternativas")                  
-                    # Finalizando a Matriz de Priorização de todas alternativas
                     matrizPriorizacaoAlternativas = finalizar_matriz_priorizacao_alternativas(desafioNormalAll, criteria_names, alternative_names)
 
 if __name__ == "__main__":
