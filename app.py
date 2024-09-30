@@ -64,7 +64,7 @@ def main():
     st.title("Avaliação de Alternativas com AHP")
 
     num_alternatives = st.number_input("Quantas alternativas você deseja avaliar?", min_value=2, step=1)
-    num_criteria = st.number_input("Quantos critérios você deseja usar?", min_value=1, step=1)
+    num_criteria = st.number_input("Quantos critérios você deseja usar?", min_value=3, step=1)
 
     if num_alternatives > 1 and num_criteria > 0:
         # Nome dos critérios
