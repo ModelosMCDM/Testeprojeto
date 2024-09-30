@@ -37,30 +37,23 @@ def VV(Consistencia):
     v = v / np.sum(v)
     return np.real(l), np.real(v)
 
-# Função para gerar matriz de comparação
-def get_comparison_matrix_criteria(n, criteria_names, matrix_key):
-    """ Função para gerar uma matriz de comparação par a par entre critérios. """
+# Função para gerar matriz de comparação de alternativas
+def get_comparison_matrix(n, alternative_names):
+    """ Função para gerar uma matriz de comparação par a par entre alternativas. """
     matrix = np.zeros((n, n))
-
-    # Armazena o estado da matriz entre interações
-    if matrix_key not in st.session_state:
-        st.session_state[matrix_key] = matrix
-    else:
-        matrix = st.session_state[matrix_key]
 
     for i in range(n):
         for j in range(i + 1, n):
             value = st.number_input(
-                f"O quão preferível o critério '{criteria_names[i]}' é em relação ao critério '{criteria_names[j]}'?",
+                f"O quão preferível a alternativa '{alternative_names[i]}' é em relação à alternativa '{alternative_names[j]}'?",
                 value=matrix[i][j] if matrix[i][j] != 0 else 1.0,
                 min_value=1.0, max_value=9.0, step=1.0,
-                key=f"{i}-{j}-{matrix_key}"
+                key=f"{i}-{j}-alternatives"
             )
             matrix[i][j] = value
             matrix[j][i] = 1 / value
 
     np.fill_diagonal(matrix, 1)  # Preenche a diagonal principal com 1
-    st.session_state[matrix_key] = matrix
     return matrix
 
 def finalizar_matriz_priorizacao_alternativas(desafioNormalAll, criteriosList, alternativasList):
@@ -77,20 +70,6 @@ def finalizar_matriz_priorizacao_alternativas(desafioNormalAll, criteriosList, a
     print("\nMatriz de Priorização de todas as alternativas:")
     print(matrizPriorizacaoAlternativas)
     return matrizPriorizacaoAlternativas
-    
-# HTML de Cabeçalho
-html_temp = """
-<img src="https://static-media.hotmart.com/d0IFT5pYRau6qyuHzfkd7_dgt6Q=/300x300/smart/filters:format(webp):background_color(white)/hotmart/product_pictures/686dcc4a-78b0-4b94-923b-c673a8ef5e75/Avatar.PNG" 
-alt="Descrição da imagem" style="width: 50px; height: 50px;">
-<div style="text-align:center; background-color: #f0f0f0; border: 1px solid #ccc; padding: 10px;">
-    <h3 style="color: black; margin-bottom: 10px;">Metodologia de apoio à decisão para manutenção inteligente, combinando abordagens multicritério</h3>
-    <p style="color: black; margin-bottom: 10px;">AHP 5555 - Xxxxxx 3</p>
-    <p style="color: black; margin-bottom: 10px;">Modo de uso: Aplique-o para escolha entre quaisquer alternativas e critérios</p>
-    <p style="color: black; margin-bottom: 10px;">Todos os métodos funcionarão automaticamente</p>
-    <p style="color: black; margin-bottom: 10px;">Jaqueline Alves do Nascimento</p>
-</div>
-"""
-st.markdown(html_temp, unsafe_allow_html=True)
 
 # Função principal para o AHP
 def main():
@@ -164,12 +143,9 @@ def main():
                 alternativas_por_criterio = {}
                 for i in range(num_criteria):
                     criterio_nome = criteria_names[i]
-                    print(f"\nInsira a matriz de priorizações par a par de cada alternativa para o critério {i + 1} ({criterio_nome}):")
+                    st.write(f"\nInsira a matriz de priorizações par a par de cada alternativa para o critério {i + 1} ({criterio_nome}):")
                     DadosCriterio = get_comparison_matrix(num_alternatives, alternative_names)
-                    exibir_tabela_comparacao_alternativas(alternative_names, DadosCriterio, criterio_nome)
-                    # Processar a matriz de alternativas
-                    peso_criterio = processar_matriz_alternativas(DadosCriterio, criterio_nome)
-                    desafioNormalAll.append(peso_criterio)
+                    st.write(pd.DataFrame(DadosCriterio, index=alternative_names, columns=alternative_names))
 
 if __name__ == "__main__":
     main()
