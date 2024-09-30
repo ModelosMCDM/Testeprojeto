@@ -140,5 +140,20 @@ def main():
                     plt.xticks(rotation=45)
                     st.pyplot(plt)
 
+# Função para montagem da matriz de priorizações par a par de cada alternativa
+alternativas_por_criterio = {}  # Dicionário para armazenar as tabelas
+for i in range(num_criteria):
+    criterio_nome = criteria_names[i]
+    print(f"\nInsira a matriz de priorizações par a par de cada alternativa para o critério {i + 1} ({criterio_nome}):")
+    DadosCriterio = get_comparison_matrix(num_alternatives, alternative_names)
+    exibir_tabela_comparacao_alternativas(alternative_names, DadosCriterio, criterio_nome)
+    # Processar a matriz de alternativas
+    peso_criterio = processar_matriz_alternativas(DadosCriterio, criterio_nome)
+    desafioNormalAll.append(peso_criterio)
+
+# Finalizando a Matriz de Priorização de todas alternativas
+matrizPriorizacaoAlternativas = finalizar_matriz_priorizacao_alternativas(desafioNormalAll, criteria_names, alternative_names)
+
+
 if __name__ == "__main__":
     main()
