@@ -38,17 +38,22 @@ def VV(Consistencia):
     return np.real(l), np.real(v)
 
 # Função para gerar matriz de comparação
-def get_comparison_matrix(n, names, matrix_key):
+def get_comparison_matrix_criteria(n, criteria_names, matrix_key):
+    """
+    Função para gerar uma matriz de comparação par a par entre critérios.
+    """
     matrix = np.zeros((n, n))
+    
     # Armazena o estado da matriz entre interações
     if matrix_key not in st.session_state:
         st.session_state[matrix_key] = matrix
     else:
         matrix = st.session_state[matrix_key]
+        
     for i in range(n):
         for j in range(i + 1, n):
             value = st.number_input(
-                f"O quão preferível o critério {names[i]} é em relação a {names[j]}",
+                f"O quão preferível o critério '{criteria_names[i]}' é em relação ao critério '{criteria_names[j]}'?",
                 value=matrix[i][j] if matrix[i][j] != 0 else 1.0,
                 min_value=1.0, max_value=9.0, step=1.0,
                 key=f"{i}-{j}-{matrix_key}"
