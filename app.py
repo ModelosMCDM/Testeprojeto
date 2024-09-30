@@ -19,7 +19,6 @@ def NormalizingCritera(dataP):
     for x in columnsP:
         resultP[x] = resultP[x] / sum(resultP[x])
         resultP["Csoma"] += resultP[x]
-
     resultP['MatrizdePeso'] = resultP["Csoma"] / len(columnsP)
     return resultP
 
@@ -41,7 +40,6 @@ def VV(Consistencia):
 # Função para gerar matriz de comparação
 def get_comparison_matrix(n, names, matrix_key):
     matrix = np.zeros((n, n))
-
     # Armazena o estado da matriz entre interações
     if matrix_key not in st.session_state:
         st.session_state[matrix_key] = matrix
@@ -55,14 +53,13 @@ def get_comparison_matrix(n, names, matrix_key):
                                     min_value=1.0, max_value=9.0, step=1.0, key=f"{i}-{j}-{matrix_key}")
             matrix[i][j] = value
             matrix[j][i] = 1 / value
+
     np.fill_diagonal(matrix, 1)  # Preenche a diagonal principal com 1
     st.session_state[matrix_key] = matrix
     return matrix
 
 html_temp = """
-<img src="https://static-media.hotmart.com/d0IFT5pYRau6qyuHzfkd7_dgt6Q=/300x300/smart/filters:format(webp):background_color(white)/hotmart/product_pictures/686dcc4a-78b0-4b94-923b-c673a8ef5e75/Avatar.PNG" 
-         alt="Descrição da imagem"
-         style="width: 50px; height: 50px;">
+<img src="https://static-media.hotmart.com/d0IFT5pYRau6qyuHzfkd7_dgt6Q=/300x300/smart/filters:format(webp):background_color(white)/hotmart/product_pictures/686dcc4a-78b0-4b94-923b-c673a8ef5e75/Avatar.PNG" alt="Descrição da imagem" style="width: 50px; height: 50px;">
 <div style="text-align:center; background-color: #f0f0f0; border: 1px solid #ccc; padding: 10px;">
     <h3 style="color: black; margin-bottom: 10px;">Metodologia de apoio à decisão para manutenção inteligente, combinando abordagens multicritério</h3>
     <p style="color: black; margin-bottom: 10px;">AHP - Xxxxxx 3</p>
@@ -72,7 +69,6 @@ html_temp = """
 </div>
 """
 st.markdown(html_temp, unsafe_allow_html=True)
-
 
 # Função principal para o AHP
 def main():
@@ -103,7 +99,7 @@ def main():
                 matrix_criteria = get_comparison_matrix(num_criteria, criteria_names, "matrix_criteria")
                 df_criteria = pd.DataFrame(matrix_criteria, index=criteria_names, columns=criteria_names)
 
-                # ** Botão para gerar a matriz ** depois das entradas
+                # Botão para gerar a matriz
                 gerar_matriz = st.button("Gerar Matriz de Comparação dos Critérios")
 
                 if gerar_matriz:
@@ -119,10 +115,10 @@ def main():
                     Consistencia1 = normalizandocriterio.to_numpy()
                     l, v = VV(Consistencia1)
                     cr = DadosSaaty(l, Consistencia1.shape[0])
+
                     st.write(f"Autovalor: {l:.2f}")
                     st.write(f"Autovetor: {np.round(v, 2)}")
                     st.write(f"Índice de Consistência: {cr:.2f}")
-
                     if cr > 0.1:
                         st.warning("A matriz é inconsistente!")
                     else:
@@ -143,17 +139,16 @@ def main():
                 # Função para montagem da matriz de priorizações par a par de cada alternativa
                 st.subheader("Montagem da matriz de priorizações par a par de cada alternativa por critério")
                 alternativas_por_criterio = {}
-
                 for i in range(num_criteria):
                     criterio_nome = criteria_names[i]
                     st.write(f"\nCritério {i + 1}: {criterio_nome}")
                     matriz_alternativas = get_comparison_matrix(num_alternatives, alternative_names, f"alternatives_matrix_{i}")
                     df_alternativas = pd.DataFrame(matriz_alternativas, index=alternative_names, columns=alternative_names)
                     st.write(df_alternativas)
-
                     alternativas_por_criterio[criterio_nome] = df_alternativas
 
-                # Aqui você pode incluir mais operações para processar as matrizes de alternativas por critério.
+                # Processar matrizes de alternativas por critério
+                # (adicionar código aqui para processar essas matrizes)
 
 if __name__ == "__main__":
     main()
