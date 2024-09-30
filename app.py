@@ -165,3 +165,13 @@ def main():
     st.write(type(matrizPriorizacaoAlternativas))
     matriz_np = np.array(matrizPriorizacaoAlternativas)
     matriz_df = pd
+    matriz_df = pd.DataFrame(matriz_np, columns=matrizPriorizacaoAlternativas.columns, index=matrizPriorizacaoAlternativas.index)
+    
+    def format_with_comma(value):
+        return f"{value:.6f}".replace('.', ',')
+    
+    matriz_df_formatted = matriz_df.applymap(format_with_comma)
+    st.write(matriz_df_formatted)
+
+if __name__ == "__main__":
+    main()
