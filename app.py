@@ -174,9 +174,10 @@ def main():
 
                     # Calcular e adicionar as colunas para cada alternativa
                     for alternativa in alternative_names:
-                        matriz_final_priorizacao[alternativa] = matriz_final_priorizacao["Peso dos Critérios"] * \
-                                                                pd.concat([alternativas_por_criterio[criterio][alternativa]
-                                                                           for criterio in criteria_names], axis=1)
+                        matriz_final_priorizacao[alternativa] = [
+                            TabelaPesoDosCriterios["MatrizdePeso"][i] * alternativas_por_criterio[criteria_names[i]].loc[alternativa]
+                            for i in range(num_criteria)
+                        ]
 
                     st.write("Matriz de Priorização de todas as alternativas:")
                     st.write(matriz_final_priorizacao)
