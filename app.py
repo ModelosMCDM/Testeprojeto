@@ -18,19 +18,20 @@ def gerar_matriz_comparacao(num_criterios):
     for i in range(num_criterios):
         for j in range(i + 1, num_criterios):
             key = f"comparacao_{i}_{j}"
+
+            # Check if the value exists in session_state, otherwise set default value
             if key not in st.session_state:
-                st.session_state[key] = 1.0  # Default value
+                st.session_state[key] = 1.0
 
             valor = st.number_input(
-                f"Informe a importância do critério {i+1} em relação ao critério {j+1}", 
-                min_value=0.0, step=0.1, value=st.session_state[key],
-                key=key
+                f"Informe a importância do critério {i+1} em relação ao critério {j+1}",
+                min_value=0.0, step=0.1, key=key
             )
-            
+
             # Check to avoid division by zero
             if valor == 0:
                 st.warning(f"O valor não pode ser zero para a comparação entre critério {i+1} e critério {j+1}.")
-                continue  # Skip the current iteration if valor is 0
+                continue
 
             matriz[i, j] = valor
             matriz[j, i] = 1 / valor
