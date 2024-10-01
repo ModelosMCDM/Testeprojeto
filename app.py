@@ -162,7 +162,24 @@ def main():
                     st.write(TabelaPesoDasAlternativas)
 
                     # Armazenando a matriz de alternativas normalizada e o vetor de peso
-                    alternativas_por_criterio[criterio_nome] = TabelaPesoDasAlternativas
+                    alternativas_por_criterio[criterio_nome] = TabelaPesoDasAlternativas['MatrizdePeso']
+
+                # Função para finalizar a matriz de priorização de todas as alternativas
+                if st.button("Finalizar Matriz de Priorização das Alternativas"):
+                    # Criar uma matriz final com os pesos dos critérios e das alternativas
+                    matriz_final_priorizacao = pd.DataFrame(index=criteria_names)
+
+                    # Adicionar coluna de pesos dos critérios
+                    matriz_final_priorizacao["Peso dos Critérios"] = TabelaPesoDosCriterios["MatrizdePeso"]
+
+                    # Calcular e adicionar as colunas para cada alternativa
+                    for alternativa in alternative_names:
+                        matriz_final_priorizacao[alternativa] = matriz_final_priorizacao["Peso dos Critérios"] * \
+                                                                pd.concat([alternativas_por_criterio[criterio][alternativa]
+                                                                           for criterio in criteria_names], axis=1)
+
+                    st.write("Matriz de Priorização de todas as alternativas:")
+                    st.write(matriz_final_priorizacao)
 
 if __name__ == "__main__":
     main()
