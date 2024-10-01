@@ -185,17 +185,17 @@ def main():
                     # Armazenando a matriz de alternativas normalizada e o vetor de peso
                     alternativas_por_criterio[criterio_nome] = TabelaPesoDasAlternativas
 
-if st.button("Finalizar Matriz de Priorização das Alternativas"):
-    matriz_final_priorizacao = finalizar_matriz_priorizacao_alternativas(alternativas_por_criterio, criteria_names, alternative_names)
-    st.write("Matriz de Priorização Final:")
-    st.write(matriz_final_priorizacao)
-
-    # Gráfico de priorização das alternativas
-    st.subheader("Gráfico de Priorização das Alternativas")
-    plt.figure(figsize=(10, 5))
-    ax = sns.barplot(x=matriz_final_priorizacao.index, y=matriz_final_priorizacao[alternative_names])
-    plt.xticks(rotation=45)
-    st.pyplot(plt)
+                    if st.button("Finalizar Matriz de Priorização das Alternativas"):
+                        matriz_final_priorizacao = finalizar_matriz_priorizacao_alternativas(alternativas_por_criterio, criteria_names, alternative_names)
+                        st.write("Matriz de Priorização Final:")
+                        st.write(matriz_final_priorizacao)
+                    
+                        # Gráfico de priorização das alternativas
+                        st.subheader("Gráfico de Priorização das Alternativas")
+                        plt.figure(figsize=(10, 5))
+                        ax = sns.barplot(x=matriz_final_priorizacao.index, y=matriz_final_priorizacao[alternative_names])
+                        plt.xticks(rotation=45)
+                        st.pyplot(plt)
 
 if __name__ == "__main__":
     main()
