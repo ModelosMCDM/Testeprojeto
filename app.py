@@ -59,29 +59,6 @@ def get_comparison_matrix(n, names, matrix_key):
     st.session_state[matrix_key] = matrix
     return matrix
 
-
-# Função para finalizar a matriz de priorização das alternativas
-def finalizar_matriz_priorizacao_alternativas(alternativas_por_criterio, criteriosList, alternativasList):
-    # Extrai o peso dos critérios da primeira matriz (assumindo que o peso dos critérios foi calculado anteriormente)
-    matrizPriorizacaoAlternativas = pd.DataFrame(alternativas_por_criterio[criteriosList[0]]['MatrizdePeso'])
-    matrizPriorizacaoAlternativas.columns = ['Peso dos Critérios']
-
-    # Para cada alternativa, cria uma coluna com seus valores para cada critério
-    for alt in alternativasList:
-        auxList = []
-        for crit in criteriosList:
-            auxList.append(alternativas_por_criterio[crit]['MatrizdePeso'][alt])
-        matrizPriorizacaoAlternativas[alt] = auxList
-
-    # Exibe a matriz de priorização na interface Streamlit
-    st.write("### Matriz de Priorização de todas as alternativas:")
-    st.write(matrizPriorizacaoAlternativas)  # Utiliza st.write para mostrar a matriz na interface
-
-    return matrizPriorizacaoAlternativas
-
-
-
-
 # Função principal para o AHP
 def main():
     st.title("Avaliação de Alternativas com AHP")
@@ -184,23 +161,8 @@ def main():
                     st.write(f"Vetor de peso para o critério '{criterio_nome}':")
                     st.write(TabelaPesoDasAlternativas)
 
-                    # Armazena a matriz de peso no dicionário alternativas_por_criterio
+                    # Armazenando a matriz de alternativas normalizada e o vetor de peso
                     alternativas_por_criterio[criterio_nome] = TabelaPesoDasAlternativas
-
-                # Botão para finalizar a matriz de priorização das alternativas
-                if st.button("Finalizar Matriz de Priorização das Alternativas"):
-                    matriz_final_priorizacao = finalizar_matriz_priorizacao_alternativas(alternativas_por_criterio, criteria_names, alternative_names)
-                    st.write("Matriz de Priorização Final:")
-                    st.write(matriz_final_priorizacao)
-
-                    # Gráfico de priorização das alternativas
-                    st.subheader("Gráfico de Priorização das Alternativas")
-                    plt.figure(figsize=(10, 5))
-                    for alt in alternative_names:
-                        sns.barplot(x=matriz_final_priorizacao.index, y=matriz_final_priorizacao[alt], label=alt)
-                    plt.xticks(rotation=45)
-                    plt.legend()
-                    st.pyplot(plt)
 
 if __name__ == "__main__":
     main()
