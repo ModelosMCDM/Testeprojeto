@@ -14,13 +14,20 @@ st.set_page_config(
 )
 
 # Função para gerar a matriz de comparação
-def gerar_matriz_comparacao(n):
-    matriz = np.ones((n, n))
-    for i in range(n):
-        for j in range(i+1, n):
-            valor = st.number_input(f"Insira o valor da comparação entre o critério {criterios[i]} e {criterios[j]}:", min_value=0.0, max_value=9.0, step=0.1)
+def gerar_matriz_comparacao(num_criterios):
+    matriz = np.zeros((num_criterios, num_criterios))
+    for i in range(num_criterios):
+        for j in range(i + 1, num_criterios):
+            valor = st.number_input(f"Informe a importância do critério {i+1} em relação ao critério {j+1}", min_value=0.0, step=0.1)
+            
+            # Check to avoid division by zero
+            if valor == 0:
+                st.warning(f"O valor não pode ser zero para a comparação entre critério {i+1} e critério {j+1}.")
+                continue  # Skip the current iteration if valor is 0
+
             matriz[i, j] = valor
             matriz[j, i] = 1 / valor
+
     return matriz
 
 # Função para calcular consistência usando o método de Saaty
