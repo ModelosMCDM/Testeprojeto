@@ -184,17 +184,23 @@ def main():
                     st.write(f"Vetor de peso para o critério '{criterio_nome}':")
                     st.write(TabelaPesoDasAlternativas)
 
-                    if st.button("Finalizar Matriz de Priorização das Alternativas"):
-                        matriz_final_priorizacao = finalizar_matriz_priorizacao_alternativas(alternativas_por_criterio, criteria_names, alternative_names)
-                        st.write("Matriz de Priorização Final:")
-                        st.write(matriz_final_priorizacao)
-                    
-                        # Gráfico de priorização das alternativas
-                        st.subheader("Gráfico de Priorização das Alternativas")
-                        plt.figure(figsize=(10, 5))
-                        ax = sns.barplot(x=matriz_final_priorizacao.index, y=matriz_final_priorizacao[alternative_names])
-                        plt.xticks(rotation=45)
-                        st.pyplot(plt)
+                    # Armazena a matriz de peso no dicionário alternativas_por_criterio
+                    alternativas_por_criterio[criterio_nome] = TabelaPesoDasAlternativas
+
+                # Botão para finalizar a matriz de priorização das alternativas
+                if st.button("Finalizar Matriz de Priorização das Alternativas"):
+                    matriz_final_priorizacao = finalizar_matriz_priorizacao_alternativas(alternativas_por_criterio, criteria_names, alternative_names)
+                    st.write("Matriz de Priorização Final:")
+                    st.write(matriz_final_priorizacao)
+
+                    # Gráfico de priorização das alternativas
+                    st.subheader("Gráfico de Priorização das Alternativas")
+                    plt.figure(figsize=(10, 5))
+                    for alt in alternative_names:
+                        sns.barplot(x=matriz_final_priorizacao.index, y=matriz_final_priorizacao[alt], label=alt)
+                    plt.xticks(rotation=45)
+                    plt.legend()
+                    st.pyplot(plt)
 
 if __name__ == "__main__":
     main()
