@@ -185,9 +185,9 @@ def main():
                     # Armazenando a matriz de alternativas normalizada e o vetor de peso
                     alternativas_por_criterio[criterio_nome] = TabelaPesoDasAlternativas
 
-    matriz_final_priorizacao = finalizar_matriz_priorizacao_alternativas(alternativas_por_criterio, criteria_names, alternative_names)
-    st.write("Matriz de Priorização Final:")
-    st.write(matriz_final_priorizacao)
+                    matriz_final_priorizacao = finalizar_matriz_priorizacao_alternativas(alternativas_por_criterio, criteria_names, alternative_names)
+                    st.write("Matriz de Priorização Final:")
+                    st.write(matriz_final_priorizacao)
 
 if __name__ == "__main__":
     main()
