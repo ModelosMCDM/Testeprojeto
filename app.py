@@ -20,9 +20,9 @@ html_temp = """
          style="width: 250px; height: auto;">
 
 <div style="text-align:center; background-color: #f0f0f0; border: 1px solid #ccc; padding: 10px;">
-    <h3 style="color: black; margin-bottom: 10px;">Metodologia de apoio à decisão para manutenção inteligente, combinando abordagens multicritério</h3>
-    <p style="color: black; margin-bottom: 10px;"">Pxxxxx xxx</p>
-    <p style="color: black; margin-bottom: 10px;"">Modo de uso: Aplique-o para escolha xxx</p>
+    <h3 style="color: black; margin-bottom: 10px;">Metodologia de apoio à decisão - DIRIM </h3>
+    <p style="color: black; margin-bottom: 10px;"">xxxx xxx</p>
+    <p style="color: black; margin-bottom: 10px;"">Modo de uso: Digite quantas alternativas e criterios para tomar decisão são existente? Complete com a descrição </p>
     <p style="color: black; margin-bottom: 10px;"">Todos os métodos funcionarão automaticamente</p>
 </div>
 
@@ -61,7 +61,7 @@ def NormalizingConsistency(dataP):
     return resultP
 
 # Pergunta ao usuário o número de critérios e alternativas
-st.markdown("<h2 style='text-align: center; background-color: #6495ED;'> Método de Apoio à Decisão </h2>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center; background-color: #6495ED;'> Método de Apoio à Decisão </h1>", unsafe_allow_html=True)
 
 num_criterios = st.number_input("Quantos critérios serão utilizados?", min_value=2, step=1)
 criterios = []
@@ -158,7 +158,7 @@ try:
 
     # Gráfico do resultado final
     st.subheader("4. Gráfico do Resultado Final")
-    plt.figure(figsize=(6, 1))  # largura e altura
+    plt.figure(figsize=(22,1))  # largura e altura
     plt.title("Resultado Final - Pesos das Alternativas", fontsize=10)
     ax = sns.barplot(x=df_resultado.index, y=df_resultado["Peso Final"], data=df_resultado)
 
