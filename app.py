@@ -158,12 +158,11 @@ def main():
                     st.subheader("Matriz de Priorização de todas as alternativas")
                     
                     # Vetores de peso dos critérios
-                    pesos_criterios = v
-
-                    # Verificação para evitar erro
-                    if pesos_criterios is None or len(pesos_criterios) == 0:
+                    if 'v' not in locals() or v is None or len(v) == 0:
                         st.error("Erro ao calcular os pesos dos critérios na matriz final.")
                         return
+
+                    pesos_criterios = v
 
                     # Matriz de priorização final
                     matriz_priorizacao_final = pd.DataFrame(0, index=alternative_names, columns=criteria_names)
