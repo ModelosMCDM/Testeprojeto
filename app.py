@@ -149,10 +149,10 @@ else:
         df_resultado = pd.DataFrame(pesos_finais, index=alternativas, columns=["Peso Final"])
         st.write(df_resultado)
 
-        # Gráfico do resultado final
-        st.subheader("4. Gráfico do Resultado Final")
-        plt.figure(figsize=(25,2))  # largura e altura
-        plt.title("Resultado Final - Pesos das Alternativas", fontsize=10)
+        # Resultado final
+        st.subheader("4. Resultado final")
+        plt.figure(figsize=(27,2))  # largura e altura
+        plt.title("Ranking das suas alternativas", fontsize=10)
         ax = sns.barplot(x=df_resultado.index, y=df_resultado["Peso Final"], data=df_resultado)
 
         for p in ax.patches:
