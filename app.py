@@ -28,6 +28,7 @@ html_temp = """
 </div>
 
 """
+st.markdown(html_temp, unsafe_allow_html=True)
 
 # Função de consistência de Saaty
 def DadosSaaty(lamb, N):
