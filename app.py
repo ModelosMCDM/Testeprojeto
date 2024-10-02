@@ -152,12 +152,12 @@ else:
         # Resultado final
         st.subheader("4. Resultado final")
         plt.figure(figsize=(27,4))  # largura e altura
-        plt.title("Ranking das suas alternativas", fontsize=10)
+        plt.title("Ranking das suas alternativas", fontsize=14)
         ax = sns.barplot(x=df_resultado.index, y=df_resultado["Peso Final"], data=df_resultado)
 
         for p in ax.patches:
             height = p.get_height()
-            ax.text(p.get_x() + p.get_width() / 2, height + 0.01, '{:1.2f}'.format(height), ha='center', fontsize=16)
+            ax.text(p.get_x() + p.get_width() / 2, height + 0.01, '{:1.2f}'.format(height), ha='center', fontsize=14)
 
         st.pyplot(plt)
 
