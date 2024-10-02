@@ -21,7 +21,6 @@ html_temp = """
 
 <div style="text-align:center; background-color: #f0f0f0; border: 1px solid #ccc; padding: 10px;">
     <h3 style="color: black; margin-bottom: 10px;">Metodologia de apoio à decisão </h3>
-    <p style="color: black; margin-bottom: 10px;"">xxxx xxx</p>
     <p style="color: black; margin-bottom: 10px;"">Modo de uso: Digite quantas alternativas e criterios para tomar decisão serão existentes. Na sequência complete com as opções </p>
     <p style="color: black; margin-bottom: 10px;"">Com base na métodologia de Thomas Saaty - Por Jaqueline Alves </p>
     <p style="color: black; margin-bottom: 10px;"">Todos os métodos funcionarão automaticamente</p>
