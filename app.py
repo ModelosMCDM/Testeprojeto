@@ -22,7 +22,7 @@ html_temp = """
 <div style="text-align:center; background-color: #f0f0f0; border: 1px solid #ccc; padding: 10px;">
     <h3 style="color: black; margin-bottom: 10px;">Metodologia de apoio à decisão - DIRIM </h3>
     <p style="color: black; margin-bottom: 10px;"">xxxx xxx</p>
-    <p style="color: black; margin-bottom: 10px;"">Modo de uso: Digite quantas alternativas e criterios para tomar decisão são existente? Complete com a descrição </p>
+    <p style="color: black; margin-bottom: 10px;"">Modo de uso: Digite quantas alternativas e criterios para tomar decisão serão existentes. Na sequência complete com as opçõeso </p>
     <p style="color: black; margin-bottom: 10px;"">Todos os métodos funcionarão automaticamente</p>
 </div>
 
@@ -61,19 +61,19 @@ def NormalizingConsistency(dataP):
     return resultP
 
 # Pergunta ao usuário o número de critérios e alternativas
-st.markdown("<h1 style='text-align: center; background-color: #6495ED;'> Método de Apoio à Decisão </h1>", unsafe_allow_html=True)
-
-num_criterios = st.number_input("Quantos critérios serão utilizados?", min_value=2, step=1)
-criterios = []
-for i in range(num_criterios):
-    criterio = st.text_input(f"Informe o nome do critério {i + 1}:")
-    criterios.append(criterio)
+st.markdown("<h3 style='text-align: center; background-color: #6495ED;'> Estrutura hierárquica </h3>", unsafe_allow_html=True)
 
 num_alternativas = st.number_input("Quantas alternativas serão analisadas?", min_value=2, step=1)
 alternativas = []
 for i in range(num_alternativas):
     alternativa = st.text_input(f"Informe o nome da alternativa {i + 1}:")
     alternativas.append(alternativa)
+
+num_criterios = st.number_input("Quantos critérios serão utilizados?", min_value=2, step=1)
+criterios = []
+for i in range(num_criterios):
+    criterio = st.text_input(f"Informe o nome do critério {i + 1}:")
+    criterios.append(criterio)
 
 # Verificar se todos os critérios e alternativas foram preenchidos
 if any(criterio == '' for criterio in criterios):
