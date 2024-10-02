@@ -109,37 +109,45 @@ st.pyplot(plt)
 
 # Pergunta ao usuário as comparações para as alternativas
 st.subheader("2. Comparação das Alternativas")
-matriz_alternativas = np.zeros((num_alternativas, num_criterios))
 
-for i in range(num_criterios):
-    st.write(f"Comparação de alternativas para o critério: {criterios[i]}")
-    for j in range(num_alternativas):
-        valor_alternativa = st.number_input(f"Peso da alternativa {alternativas[j]} para o critério {criterios[i]} (escala 1-9)", min_value=1, max_value=9)
-        matriz_alternativas[j, i] = valor_alternativa
+try:
+    matriz_alternativas = np.ones((num_alternativas, num_alternativas))
 
-# Exibir a matriz de alternativas
-df_matriz_alternativas = pd.DataFrame(matriz_alternativas, index=alternativas, columns=criterios)
-st.write(df_matriz_alternativas)
+    # Coleta comparações de preferências entre as alternativas para cada critério
+    for crit in criterios:
+        st.write(f"Comparação de alternativas para o critério: {crit}")
+        for i in range(num_alternativas):
+            for j in range(i + 1, num_alternativas):
+                valor_alternativa = st.number_input(f"O quão preferível a alternativa {alternativas[i]} é em relação à alternativa {alternativas[j]} para o critério {crit} (escala 1-9)", min_value=1, max_value=9)
+                matriz_alternativas[i, j] = valor_alternativa
+                matriz_alternativas[j, i] = 1 / valor_alternativa
 
-# Normalizar a matriz de alternativas
-st.subheader("2.1 - Normalizando a Matriz de Alternativas")
-normalizada_alternativas = NormalizingConsistency(df_matriz_alternativas)
-st.write(normalizada_alternativas)
+    # Exibir a matriz de alternativas
+    df_matriz_alternativas = pd.DataFrame(matriz_alternativas, index=alternativas, columns=alternativas)
+    st.write(df_matriz_alternativas)
 
-# Exibição dos resultados finais e pesos das alternativas
-st.subheader("3. Resultado Final")
-pesos_finais = np.dot(normalizada_alternativas, v)
-df_resultado = pd.DataFrame(pesos_finais, index=alternativas, columns=["Peso Final"])
-st.write(df_resultado)
+    # Normalizar a matriz de alternativas
+    st.subheader("2.1 - Normalizando a Matriz de Alternativas")
+    normalizada_alternativas = NormalizingConsistency(df_matriz_alternativas)
+    st.write(normalizada_alternativas)
 
-# Gráfico do resultado final
-st.subheader("4. Gráfico do Resultado Final")
-plt.figure(figsize=(10, 4))
-plt.title("Resultado Final - Pesos das Alternativas", fontsize=14)
-ax = sns.barplot(x=df_resultado.index, y=df_resultado["Peso Final"], data=df_resultado)
+    # Exibição dos resultados finais e pesos das alternativas
+    st.subheader("3. Resultado Final")
+    pesos_finais = np.dot(normalizada_alternativas, v)
+    df_resultado = pd.DataFrame(pesos_finais, index=alternativas, columns=["Peso Final"])
+    st.write(df_resultado)
 
-for p in ax.patches:
-    height = p.get_height()
-    ax.text(p.get_x() + p.get_width() / 2, height + 0.01, '{:1.2f}'.format(height), ha='center', fontsize=12)
+    # Gráfico do resultado final
+    st.subheader("4. Gráfico do Resultado Final")
+    plt.figure(figsize=(10, 4))
+    plt.title("Resultado Final - Pesos das Alternativas", fontsize=14)
+    ax = sns.barplot(x=df_resultado.index, y=df_resultado["Peso Final"], data=df_resultado)
 
-st.pyplot(plt)
+    for p in ax.patches:
+        height = p.get_height()
+        ax.text(p.get_x() + p.get_width() / 2, height + 0.01, '{:1.2f}'.format(height), ha='center', fontsize=12)
+
+    st.pyplot(plt)
+    
+except Exception as e:
+    st.error(f"Ocorreu um erro ao processar as comparações de alternativas: {e}")
