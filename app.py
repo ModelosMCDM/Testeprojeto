@@ -2,7 +2,6 @@ import sys
 import streamlit as st
 import numpy as np
 import pandas as pd
-from sklearn.preprocessing import Normalizer
 import matplotlib.pyplot as plt
 import seaborn as sns
 sns.set(style="whitegrid")
@@ -10,13 +9,10 @@ backgroundColor = "#ADD8E6"
 
 # Configuração inicial da página
 st.set_page_config(
-    page_title="JAQUELINE ALVES",
+    page_title="JACKE",
     layout="wide",
     initial_sidebar_state="expanded",
 )
-
-
-st.markdown(html_temp, unsafe_allow_html=True)
 
 # Função de consistência de Saaty
 def DadosSaaty(lamb, N):
@@ -159,4 +155,3 @@ try:
     
 except Exception as e:
     st.error(f"Ocorreu um erro ao processar as comparações de alternativas: {e}")
-
