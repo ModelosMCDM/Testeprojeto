@@ -97,7 +97,7 @@ if "Consistente" in resultado_consistencia:
 # Gráfico da Matriz de Pesos
 st.subheader("1.4 - Gráfico da Matriz de Pesos")
 normalizada['Criterios'] = normalizada.index
-plt.figure(figsize=(4, 2))
+plt.figure(figsize=(12, 6))  # largura e altura
 plt.title("Matriz de Pesos", fontsize=14)
 ax = sns.barplot(x='Criterios', y=v, data=normalizada)
 
