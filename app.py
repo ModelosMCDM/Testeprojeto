@@ -30,13 +30,25 @@ def DadosSaaty(lamb, N):
     return cr
 
 def VV(Consistencia):
-    l, v = np.linalg.eig(Consistencia)
-    v = v.T
-    i = np.argmax(l)
-    l = l[i]
-    v = v[i]
-    v = v / np.sum(v)
-    return np.real(l), np.real(v)
+    try:
+        # Cálculo dos autovalores e autovetores
+        l, v = np.linalg.eig(Consistencia)
+        v = v.T
+        i = np.argmax(l)
+        l = l[i]
+        v = v[i]
+
+        # Normalizando o autovetor para obter os pesos
+        if np.sum(v) != 0:
+            v = v / np.sum(v)
+        else:
+            st.error("Erro ao normalizar o vetor de pesos. O autovetor contém apenas zeros.")
+            return None, None
+
+        return np.real(l), np.real(v)
+    except np.linalg.LinAlgError as e:
+        st.error(f"Erro ao calcular autovalores e autovetores: {e}")
+        return None, None
 
 # Função para gerar matriz de comparação
 def get_comparison_matrix(n, names, matrix_key):
@@ -158,7 +170,7 @@ def main():
                     st.subheader("Matriz de Priorização de todas as alternativas")
                     
                     # Vetores de peso dos critérios
-                    if 'v' not in locals() or v is None or len(v) == 0:
+                    if v is None or len(v) == 0:
                         st.error("Erro ao calcular os pesos dos critérios na matriz final.")
                         return
 
