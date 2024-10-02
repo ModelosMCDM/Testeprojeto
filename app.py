@@ -46,7 +46,7 @@ def NormalizingConsistency(dataP):
     return resultP
 
 # Pergunta ao usuário o número de critérios e alternativas
-st.markdown("<h2 style='text-align: center; background-color: #6495ED;'>01 - Método AHP</h2>", unsafe_allow_html=True)
+st.markdown("<h2 style='text-align: center; background-color: #6495ED;'> Método  TESTE</h2>", unsafe_allow_html=True)
 
 num_criterios = st.number_input("Quantos critérios serão utilizados?", min_value=2, step=1)
 criterios = []
@@ -97,7 +97,7 @@ if "Consistente" in resultado_consistencia:
 # Gráfico da Matriz de Pesos
 st.subheader("1.4 - Gráfico da Matriz de Pesos")
 normalizada['Criterios'] = normalizada.index
-plt.figure(figsize=(10, 4))
+plt.figure(figsize=(4, 2))
 plt.title("Matriz de Pesos", fontsize=14)
 ax = sns.barplot(x='Criterios', y=v, data=normalizada)
 
@@ -139,7 +139,7 @@ try:
 
     # Gráfico do resultado final
     st.subheader("4. Gráfico do Resultado Final")
-    plt.figure(figsize=(10, 4))
+    plt.figure(figsize=(4, 6))
     plt.title("Resultado Final - Pesos das Alternativas", fontsize=14)
     ax = sns.barplot(x=df_resultado.index, y=df_resultado["Peso Final"], data=df_resultado)
 
