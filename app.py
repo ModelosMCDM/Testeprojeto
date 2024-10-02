@@ -97,7 +97,7 @@ if "Consistente" in resultado_consistencia:
 # Gráfico da Matriz de Pesos
 st.subheader("1.4 - Gráfico da Matriz de Pesos")
 normalizada['Criterios'] = normalizada.index
-plt.figure(figsize=(12, 6))  # largura e altura
+plt.figure(figsize=(12, 2))  # largura e altura
 plt.title("Matriz de Pesos", fontsize=14)
 ax = sns.barplot(x='Criterios', y=v, data=normalizada)
 
@@ -139,7 +139,7 @@ try:
 
     # Gráfico do resultado final
     st.subheader("4. Gráfico do Resultado Final")
-    plt.figure(figsize=(4, 6))
+    plt.figure(figsize=(14, 2))  # largura e altura
     plt.title("Resultado Final - Pesos das Alternativas", fontsize=14)
     ax = sns.barplot(x=df_resultado.index, y=df_resultado["Peso Final"], data=df_resultado)
 
