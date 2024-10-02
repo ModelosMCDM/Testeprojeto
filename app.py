@@ -2,57 +2,32 @@ import streamlit as st
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-import seaborn as sns
-sns.set(style="whitegrid")
 
-# Configuração da página
-st.set_page_config(
-    page_title="MESTRADO",
-    layout="wide",
-    initial_sidebar_state="expanded",
-)
+# Funções Matemáticas
+def NormalizingConsistency(dataP):
+    resultP = dataP.copy()
+    columnsP = resultP.columns.tolist()
+    for x in columnsP:
+        resultP[x] = resultP[x] / sum(resultP[x])
+    return resultP
 
-# Função para gerar a matriz de comparação
-def gerar_matriz_comparacao(num_criterios):
-    matriz = np.zeros((num_criterios, num_criterios))
-    for i in range(num_criterios):
-        for j in range(i + 1, num_criterios):
-            key = f"comparacao_{i}_{j}"
+def NormalizingCritera(dataP):
+    resultP = dataP.copy()
+    columnsP = resultP.columns.tolist()
+    resultP["Csoma"] = 0
+    for x in columnsP:
+        resultP[x] = resultP[x] / sum(resultP[x])
+        resultP["Csoma"] += resultP[x]
 
-            # Check if the value exists in session_state, otherwise set default value
-            if key not in st.session_state:
-                st.session_state[key] = 1.0
+    resultP['MatrizdePeso'] = resultP["Csoma"] / len(columnsP)
+    return resultP
 
-            valor = st.number_input(
-                f"Informe a importância do critério {i+1} em relação ao critério {j+1}",
-                min_value=0.0, step=0.1, key=key
-            )
-
-            # Check to avoid division by zero
-            if valor == 0:
-                st.warning(f"O valor não pode ser zero para a comparação entre critério {i+1} e critério {j+1}.")
-                continue
-
-            matriz[i, j] = valor
-            matriz[j, i] = 1 / valor
-
-    return matriz
-
-# Função para calcular consistência usando o método de Saaty
 def DadosSaaty(lamb, N):
-    ri = np.array([0, 0, 0.58, 0.9, 1.12, 1.32, 1.35, 1.41, 1.45, 1.49, 1.52, 1.54, 1.56, 1.58, 1.59])
+    ri = [0, 0, 0.58, 0.9, 1.12, 1.32, 1.35, 1.41, 1.45, 1.49, 1.52, 1.54, 1.56, 1.58, 1.59]
     ci = (lamb - N) / (N - 1)
+    cr = ci / ri[N]
+    return cr
 
-    if N < len(ri):
-        cr = ci / ri[N]
-        if np.any(cr > 0.1):
-            return 'Inconsistente: %.2f' % np.max(cr)
-        else:
-            return 'É Consistente: %.2f' % np.max(cr)
-    else:
-        return 'Número de elementos excede o tamanho de ri'
-
-# Função para calcular autovalores e autovetores
 def VV(Consistencia):
     l, v = np.linalg.eig(Consistencia)
     v = v.T
@@ -62,41 +37,131 @@ def VV(Consistencia):
     v = v / np.sum(v)
     return np.real(l), np.real(v)
 
-# Interface do Streamlit para inputs do usuário
-st.title("Método AHP - Comparação de Critérios")
+# Função para gerar matriz de comparação
+def get_comparison_matrix(n, names, matrix_key):
+    matrix = np.zeros((n, n))
 
-# Input de critérios e alternativas
-num_criterios = st.number_input("Quantos critérios você deseja avaliar?", min_value=2, step=1)
-criterios = []
-for i in range(num_criterios):
-    criterio = st.text_input(f"Digite o nome do critério {i+1}:")
-    criterios.append(criterio)
+    # Armazena o estado da matriz entre interações
+    if matrix_key not in st.session_state:
+        st.session_state[matrix_key] = matrix
+    else:
+        matrix = st.session_state[matrix_key]
 
-num_alternativas = st.number_input("Quantas alternativas você deseja avaliar?", min_value=2, step=1)
-alternativas = []
-for i in range(num_alternativas):
-    alternativa = st.text_input(f"Digite o nome da alternativa {i+1}:")
-    alternativas.append(alternativa)
+    for i in range(n):
+        for j in range(i + 1, n):
+            value = st.number_input(f"O quão preferível a alternativa {names[i]} é em relação a {names[j]}",
+                                    value=matrix[i][j] if matrix[i][j] != 0 else 1.0,
+                                    min_value=1.0, max_value=9.0, step=1.0, key=f"{i}-{j}-{matrix_key}")
+            matrix[i][j] = value
+            matrix[j][i] = 1 / value
+    np.fill_diagonal(matrix, 1)  # Preenche a diagonal principal com 1
+    st.session_state[matrix_key] = matrix
+    return matrix
 
-if st.button("Gerar Matriz de Comparação"):
-    # Geração da matriz de comparação de critérios
-    matriz_criterios = gerar_matriz_comparacao(num_criterios)
-    st.subheader("Matriz de Comparação dos Critérios")
-    st.write(pd.DataFrame(matriz_criterios, index=criterios, columns=criterios))
+# Função principal para o AHP
+def main():
+    st.title("Avaliação de Alternativas com AHP")
 
-    # Verificação de consistência
-    lamb = np.sum(matriz_criterios, axis=1)
-    consistencia = DadosSaaty(lamb, num_criterios)
-    st.write("Resultado da Verificação de Consistência:")
-    st.markdown(consistencia)
+    num_alternatives = st.number_input("Quantas alternativas você deseja avaliar?", min_value=2, step=1)
+    num_criteria = st.number_input("Quantos critérios você deseja usar?", min_value=3, step=1)
 
-    if "Consistente" in consistencia:
-        l, v = VV(matriz_criterios)
-        st.write("Autovalor (l):", l)
-        st.write("Autovetor (v):", ' '.join(map(str, v)))
+    if num_alternatives > 1 and num_criteria > 0:
+        # Nome dos critérios
+        st.subheader("Nome dos Critérios")
+        criteria_names = []
+        for i in range(num_criteria):
+            criteria_names.append(st.text_input(f"Critério {i + 1}", key=f"criterio-{i}"))
 
-        # Exibindo gráfico com o vetor de pesos
-        plt.figure(figsize=(10, 4))
-        plt.bar(criterios, v, color='lightblue')
-        plt.title("Vetor de Peso dos Critérios")
-        st.pyplot(plt)
+        # Verifica se todos os critérios foram preenchidos
+        if all(criteria_names):
+            # Nome das alternativas
+            st.subheader("Nome das Alternativas")
+            alternative_names = []
+            for i in range(num_alternatives):
+                alternative_names.append(st.text_input(f"Alternativa {i + 1}", key=f"alternativa-{i}"))
+
+            # Verifica se todas as alternativas foram preenchidas
+            if all(alternative_names):
+                # Matriz de comparação par a par dos critérios
+                st.subheader("Matriz de Comparação dos Critérios:")
+                matrix_criteria = get_comparison_matrix(num_criteria, criteria_names, "matrix_criteria")
+                df_criteria = pd.DataFrame(matrix_criteria, index=criteria_names, columns=criteria_names)
+
+                # ** Botão para gerar a matriz ** depois das entradas
+                gerar_matriz = st.button("Gerar Matriz de Comparação dos Critérios")
+
+                if gerar_matriz:
+                    # Exibe a matriz de comparação
+                    st.write("Matriz de Comparação dos Critérios:")
+                    st.write(df_criteria)
+
+                    # Normalização e consistência
+                    normalizandocriterio = NormalizingConsistency(df_criteria)
+                    st.write("Matriz de Comparação Normalizada dos Critérios:")
+                    st.write(normalizandocriterio)
+
+                    Consistencia1 = normalizandocriterio.to_numpy()
+                    l, v = VV(Consistencia1)
+                    cr = DadosSaaty(l, Consistencia1.shape[0])
+                    st.write(f"Autovalor: {l:.2f}")
+                    st.write(f"Autovetor: {np.round(v, 2)}")
+                    st.write(f"Índice de Consistência: {cr:.2f}")
+
+                    if cr > 0.1:
+                        st.warning("A matriz é inconsistente!")
+                    else:
+                        st.success("A matriz é consistente!")
+
+                    # Vetor de peso dos critérios
+                    TabelaPesoDosCriterios = NormalizingCritera(df_criteria)
+                    st.write("Vetor de Peso dos Critérios:")
+                    st.write(TabelaPesoDosCriterios)
+
+                    # Gráfico de peso dos critérios
+                    st.subheader("Gráfico de Peso dos Critérios")
+                    plt.figure(figsize=(10, 5))
+                    ax = sns.barplot(x=TabelaPesoDosCriterios.index, y=TabelaPesoDosCriterios['MatrizdePeso'])
+                    plt.xticks(rotation=45)
+                    st.pyplot(plt)
+
+                # Função para montagem da matriz de priorizações par a par de cada alternativa
+                st.subheader("Montagem da matriz de priorizações par a par de cada alternativa por critério")
+                alternativas_por_criterio = {}
+
+                for i in range(num_criteria):
+                    criterio_nome = criteria_names[i]
+                    st.write(f"\nCritério {i + 1}: {criterio_nome}")
+                    matriz_alternativas = get_comparison_matrix(num_alternatives, alternative_names, f"alternatives_matrix_{i}")
+                    df_alternativas = pd.DataFrame(matriz_alternativas, index=alternative_names, columns=alternative_names)
+                    st.write("Tabela de Comparação das Alternativas:")
+                    st.write(df_alternativas)
+
+                    # Normalizando a matriz de comparação
+                    normalizando_alternativas = NormalizingConsistency(df_alternativas)
+                    st.write(f"Matriz de comparação em pares das alternativas para o critério '{criterio_nome}' normalizada:")
+                    st.write(normalizando_alternativas)
+
+                    # Teste de Consistência
+                    Consistencia_alt = normalizando_alternativas.to_numpy()
+                    l_alt, v_alt = VV(Consistencia_alt)
+                    cr_alt = DadosSaaty(l_alt, Consistencia_alt.shape[0])
+                    st.write(f"Teste de consistência para o critério '{criterio_nome}':")
+                    st.write(f"Autovalor: {l_alt:.2f}")
+                    st.write(f"Autovetor: {np.round(v_alt, 2)}")
+                    st.write(f"Índice de Consistência: {cr_alt:.2f}")
+
+                    if cr_alt > 0.1:
+                        st.warning(f"A matriz de alternativas para o critério '{criterio_nome}' é inconsistente!")
+                    else:
+                        st.success(f"A matriz de alternativas para o critério '{criterio_nome}' é consistente!")
+
+                    # Vetor de peso para o critério
+                    TabelaPesoDasAlternativas = NormalizingCritera(df_alternativas)
+                    st.write(f"Vetor de peso para o critério '{criterio_nome}':")
+                    st.write(TabelaPesoDasAlternativas)
+
+                    # Armazenando a matriz de alternativas normalizada e o vetor de peso
+                    alternativas_por_criterio[criterio_nome] = TabelaPesoDasAlternativas
+
+if __name__ == "__main__":
+    main()
