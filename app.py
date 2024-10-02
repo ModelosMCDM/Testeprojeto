@@ -2,17 +2,33 @@ import sys
 import streamlit as st
 import numpy as np
 import pandas as pd
+from sklearn.preprocessing import Normalizer
 import matplotlib.pyplot as plt
 import seaborn as sns
-
 sns.set(style="whitegrid")
+backgroundColor = "#ADD8E6"
+
 
 # Configuração inicial da página
 st.set_page_config(
-    page_title="MESTRADO",
+    page_title="XXXXxxxxxxx",
     layout="wide",
     initial_sidebar_state="expanded",
 )
+
+html_temp = """
+<img src="https://www.casadamoeda.gov.br/portal/imgs/logo-cmb-4.png" 
+         alt="Descrição da imagem"
+         style="width: 250px; height: auto;">
+
+<div style="text-align:center; background-color: #f0f0f0; border: 1px solid #ccc; padding: 10px;">
+    <h3 style="color: black; margin-bottom: 10px;">Metodologia de apoio à decisão para manutenção inteligente, combinando abordagens multicritério</h3>
+    <p style="color: black; margin-bottom: 10px;"">Projeto desenvolvido no Mestrado acadêmico em Engenharia de Produção | DEI - Departamento de Engenharia Industrial - 2023</p>
+    <p style="color: black; margin-bottom: 10px;"">Modo de uso: Aplique-o para escolha entre 8 quaisquer alternativas e 6 critérios</p>
+    <p style="color: black; margin-bottom: 10px;"">Todos os métodos funcionarão automaticamente</p>
+    <p style="color: black; margin-bottom: 10px;"">Após o upload da planilha dos decisores, caso queira interagir com o Framework vá na seção 2.1 - MOORA</p>
+</div>
+st.markdown(html_temp, unsafe_allow_html=True)
 
 # Função de consistência de Saaty
 def DadosSaaty(lamb, N):
@@ -95,10 +111,10 @@ if "Consistente" in resultado_consistencia:
     st.write("Autovetor (v):", ' '.join(map(str, v)))
 
 # Gráfico da Matriz de Pesos
-st.subheader("1.4 - Gráfico da Matriz de Pesos")
+st.subheader("1.4 - Gráfico da Matriz de Pesos dos ")
 normalizada['Criterios'] = normalizada.index
-plt.figure(figsize=(12, 2))  # largura e altura
-plt.title("Matriz de Pesos", fontsize=14)
+plt.figure(figsize=(8, 1.5))  # largura e altura
+plt.title("Matriz de Peso dos criterios", fontsize=12)
 ax = sns.barplot(x='Criterios', y=v, data=normalizada)
 
 for p in ax.patches:
@@ -143,8 +159,8 @@ try:
 
     # Gráfico do resultado final
     st.subheader("4. Gráfico do Resultado Final")
-    plt.figure(figsize=(14, 2))  # largura e altura
-    plt.title("Resultado Final - Pesos das Alternativas", fontsize=14)
+    plt.figure(figsize=(6, 1.5))  # largura e altura
+    plt.title("Resultado Final - Pesos das Alternativas", fontsize=12)
     ax = sns.barplot(x=df_resultado.index, y=df_resultado["Peso Final"], data=df_resultado)
 
     for p in ax.patches:
