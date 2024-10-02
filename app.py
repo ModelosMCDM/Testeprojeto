@@ -58,7 +58,6 @@ def get_comparison_matrix(n, names, matrix_key):
     st.session_state[matrix_key] = matrix
     return matrix
 
-# Função principal para o AHP
 def main():
     st.title("Avaliação de Alternativas com AHP")
 
@@ -94,6 +93,12 @@ def main():
 
                     Consistencia1 = normalizandocriterio.to_numpy()
                     l, v = VV(Consistencia1)
+
+                    # Verificação adicional para evitar erro
+                    if v is None or len(v) == 0:
+                        st.error("Erro ao calcular os pesos dos critérios.")
+                        return
+                    
                     cr = DadosSaaty(l, Consistencia1.shape[0])
                     st.write(f"Autovalor: {l:.2f}")
                     st.write(f"Autovetor: {np.round(v, 2)}")
@@ -154,6 +159,11 @@ def main():
                     
                     # Vetores de peso dos critérios
                     pesos_criterios = v
+
+                    # Verificação adicional para evitar erro
+                    if pesos_criterios is None or len(pesos_criterios) == 0:
+                        st.error("Erro ao calcular os pesos dos critérios na matriz final.")
+                        return
 
                     # Matriz de priorização final
                     matriz_priorizacao_final = pd.DataFrame(0, index=alternative_names, columns=criteria_names)
