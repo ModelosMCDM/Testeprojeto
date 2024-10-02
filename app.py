@@ -29,22 +29,15 @@ def DadosSaaty(lamb, N):
     cr = ci / ri[N]
     return cr
 
+# Função para calcular pesos via autovalores/autovetores
 def VV(Consistencia):
     try:
-        # Cálculo dos autovalores e autovetores
         l, v = np.linalg.eig(Consistencia)
         v = v.T
         i = np.argmax(l)
         l = l[i]
         v = v[i]
-
-        # Normalizando o autovetor para obter os pesos
-        if np.sum(v) != 0:
-            v = v / np.sum(v)
-        else:
-            st.error("Erro ao normalizar o vetor de pesos. O autovetor contém apenas zeros.")
-            return None, None
-
+        v = v / np.sum(v)
         return np.real(l), np.real(v)
     except np.linalg.LinAlgError as e:
         st.error(f"Erro ao calcular autovalores e autovetores: {e}")
@@ -69,6 +62,22 @@ def get_comparison_matrix(n, names, matrix_key):
     np.fill_diagonal(matrix, 1)
     st.session_state[matrix_key] = matrix
     return matrix
+
+# Função para finalizar a matriz de priorização de alternativas
+def finalizar_matriz_priorizacao_alternativas(desafioNormalAll, criteriosList, alternativasList):
+    matrizPriorizacaoAlternativas = pd.DataFrame(desafioNormalAll[0]['MatrizdePeso'])
+    matrizPriorizacaoAlternativas.columns = ['Peso dos Critérios']
+
+    for alt in alternativasList:
+        auxList = []
+        for crit in criteriosList:
+            i = criteriosList.index(crit) + 1
+            auxList.append(desafioNormalAll[i]['MatrizdePeso'][alt])
+        matrizPriorizacaoAlternativas[alt] = auxList
+
+    st.write("\nMatriz de Priorização de todas as alternativas:")
+    st.write(matrizPriorizacaoAlternativas)
+    return matrizPriorizacaoAlternativas
 
 def main():
     st.title("Avaliação de Alternativas com AHP")
@@ -106,7 +115,6 @@ def main():
                     Consistencia1 = normalizandocriterio.to_numpy()
                     l, v = VV(Consistencia1)
 
-                    # Verificação para evitar erro
                     if v is None or len(v) == 0:
                         st.error("Erro ao calcular os pesos dos critérios.")
                         return
@@ -132,7 +140,7 @@ def main():
                     st.pyplot(plt)
 
                 st.subheader("Montagem da matriz de priorizações par a par de cada alternativa por critério")
-                alternativas_por_criterio = {}
+                alternativas_por_criterio = []
 
                 for i in range(num_criteria):
                     criterio_nome = criteria_names[i]
@@ -163,29 +171,13 @@ def main():
                     st.write(f"Vetor de peso para o critério '{criterio_nome}':")
                     st.write(TabelaPesoDasAlternativas)
 
-                    alternativas_por_criterio[criterio_nome] = TabelaPesoDasAlternativas
+                    alternativas_por_criterio.append({'MatrizdePeso': TabelaPesoDasAlternativas["MatrizdePeso"]})
 
                 # Geração da matriz de priorização final
                 if alternativas_por_criterio:
                     st.subheader("Matriz de Priorização de todas as alternativas")
-                    
-                    # Vetores de peso dos critérios
-                    if v is None or len(v) == 0:
-                        st.error("Erro ao calcular os pesos dos critérios na matriz final.")
-                        return
 
-                    pesos_criterios = v
-
-                    # Matriz de priorização final
-                    matriz_priorizacao_final = pd.DataFrame(0, index=alternative_names, columns=criteria_names)
-
-                    for criterio, pesos_alternativas in alternativas_por_criterio.items():
-                        matriz_priorizacao_final[criterio] = pesos_alternativas["MatrizdePeso"].values
-
-                    # Multiplicação dos vetores de peso dos critérios com os das alternativas
-                    for alt in alternative_names:
-                        matriz_priorizacao_final.loc[alt, "Total"] = np.sum(matriz_priorizacao_final.loc[alt, criteria_names] * pesos_criterios)
-
+                    matriz_priorizacao_final = finalizar_matriz_priorizacao_alternativas(alternativas_por_criterio, criteria_names, alternative_names)
                     st.write(matriz_priorizacao_final)
 
 if __name__ == "__main__":
