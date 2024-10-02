@@ -63,21 +63,29 @@ def get_comparison_matrix(n, names, matrix_key):
     st.session_state[matrix_key] = matrix
     return matrix
 
-# Função para finalizar a matriz de priorização de alternativas
+# Função para finalizar a matriz de priorização das alternativas
 def finalizar_matriz_priorizacao_alternativas(desafioNormalAll, criteriosList, alternativasList):
+    # A matriz será preenchida com base nos pesos dos critérios
     matrizPriorizacaoAlternativas = pd.DataFrame(desafioNormalAll[0]['MatrizdePeso'])
     matrizPriorizacaoAlternativas.columns = ['Peso dos Critérios']
 
     for alt in alternativasList:
         auxList = []
         for crit in criteriosList:
-            i = criteriosList.index(crit) + 1
-            auxList.append(desafioNormalAll[i]['MatrizdePeso'][alt])
+            i = criteriosList.index(crit)  # Remover o +1, pois o índice já começa em 0
+            try:
+                auxList.append(desafioNormalAll[i]['MatrizdePeso'][alt])
+            except IndexError as e:
+                st.error(f"Erro de índice ao acessar 'desafioNormalAll[{i}]' ou 'MatrizdePeso[{alt}]': {e}")
+                return None
+            except KeyError as e:
+                st.error(f"Erro de chave ao acessar 'MatrizdePeso[{alt}]': {e}")
+                return None
         matrizPriorizacaoAlternativas[alt] = auxList
-
     st.write("\nMatriz de Priorização de todas as alternativas:")
     st.write(matrizPriorizacaoAlternativas)
     return matrizPriorizacaoAlternativas
+
 
 def main():
     st.title("Avaliação de Alternativas com AHP")
