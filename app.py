@@ -14,6 +14,21 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
+html_temp = """
+<img src="https://www.casadamoeda.gov.br/portal/imgs/logo-cmb-4.png" 
+         alt="Descrição da imagem"
+         style="width: 250px; height: auto;">
+
+<div style="text-align:center; background-color: #f0f0f0; border: 1px solid #ccc; padding: 10px;">
+    <h3 style="color: black; margin-bottom: 10px;">Metodologia de apoio à decisão para manutenção inteligente, combinando abordagens multicritério</h3>
+    <p style="color: black; margin-bottom: 10px;"">Projeto desenvolvido no Mestrado acadêmico em Engenharia de Produção | DEI - Departamento de Engenharia Industrial - 2023</p>
+    <p style="color: black; margin-bottom: 10px;"">Modo de uso: Aplique-o para escolha entre 8 quaisquer alternativas e 6 critérios</p>
+    <p style="color: black; margin-bottom: 10px;"">Todos os métodos funcionarão automaticamente</p>
+    <p style="color: black; margin-bottom: 10px;"">Após o upload da planilha dos decisores, caso queira interagir com o Framework vá na seção 2.1 - MOORA</p>
+</div>
+
+"""
+
 # Função de consistência de Saaty
 def DadosSaaty(lamb, N):
     ri = np.array([0, 0, 0.58, 0.9, 1.12, 1.32, 1.35, 1.41, 1.45, 1.49, 1.52, 1.54, 1.56, 1.58, 1.59])
