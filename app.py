@@ -2,17 +2,21 @@ import sys
 import streamlit as st
 import numpy as np
 import pandas as pd
+from sklearn.preprocessing import Normalizer
 import matplotlib.pyplot as plt
 import seaborn as sns
-
 sns.set(style="whitegrid")
+backgroundColor = "#ADD8E6"
 
 # Configuração inicial da página
 st.set_page_config(
-    page_title="MESTRADO",
+    page_title="JAQUELINE ALVES",
     layout="wide",
     initial_sidebar_state="expanded",
 )
+
+
+st.markdown(html_temp, unsafe_allow_html=True)
 
 # Função de consistência de Saaty
 def DadosSaaty(lamb, N):
