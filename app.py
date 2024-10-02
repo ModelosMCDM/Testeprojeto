@@ -75,98 +75,91 @@ for i in range(num_alternativas):
     alternativa = st.text_input(f"Informe o nome da alternativa {i + 1}:")
     alternativas.append(alternativa)
 
-# Gerar matriz de comparação dos critérios
-st.subheader("1.1 - Matriz de Comparação dos Critérios")
-matriz_comparacao_criterios = np.ones((num_criterios, num_criterios))
+# Verificar se todos os critérios e alternativas foram preenchidos
+if any(criterio == '' for criterio in criterios):
+    st.error("Por favor, preencha todos os critérios.")
+elif any(alternativa == '' for alternativa in alternativas):
+    st.error("Por favor, preencha todas as alternativas.")
+else:
+    # Gerar matriz de comparação dos critérios
+    st.subheader("1.1 - Matriz de Comparação dos Critérios")
+    matriz_comparacao_criterios = np.ones((num_criterios, num_criterios))
 
-# Entrada dos valores de comparação
-for i in range(num_criterios):
-    for j in range(i + 1, num_criterios):
-        valor_comparacao = st.number_input(f"Comparação de importância: {criterios[i]} vs {criterios[j]} (escala 1-9)", min_value=1, max_value=9)
-        matriz_comparacao_criterios[i, j] = valor_comparacao
-        matriz_comparacao_criterios[j, i] = 1 / valor_comparacao
+    # Entrada dos valores de comparação
+    for i in range(num_criterios):
+        for j in range(i + 1, num_criterios):
+            valor_comparacao = st.number_input(f"Comparação de importância: {criterios[i]} vs {criterios[j]} (escala 1-9)", min_value=1, max_value=9)
+            matriz_comparacao_criterios[i, j] = valor_comparacao
+            matriz_comparacao_criterios[j, i] = 1 / valor_comparacao
 
-# Exibir a matriz gerada
-df_matriz_comparacao = pd.DataFrame(matriz_comparacao_criterios, index=criterios, columns=criterios)
-st.write(df_matriz_comparacao)
+    # Exibir a matriz gerada
+    df_matriz_comparacao = pd.DataFrame(matriz_comparacao_criterios, index=criterios, columns=criterios)
+    st.write(df_matriz_comparacao)
 
-# Normalizando a matriz de comparação
-st.subheader("1.2 - Normalizando a Matriz de Comparação")
-normalizada = NormalizingConsistency(df_matriz_comparacao)
-st.write(normalizada)
+    # Normalizando a matriz de comparação
+    st.subheader("1.2 - Normalizando a Matriz de Comparação")
+    normalizada = NormalizingConsistency(df_matriz_comparacao)
+    st.write(normalizada)
 
-# Cálculo de consistência
-st.subheader("1.3 - Verificação de Consistência")
-array_ahp = normalizada.to_numpy()
-N = len(array_ahp)
-lamb = np.sum(array_ahp, axis=1)
-resultado_consistencia = DadosSaaty(lamb, N)
-st.markdown(f"**Resultado da Verificação de Consistência:** {resultado_consistencia}")
+    # Cálculo de consistência
+    st.subheader("1.3 - Verificação de Consistência")
+    array_ahp = normalizada.to_numpy()
+    N = len(array_ahp)
+    lamb = np.sum(array_ahp, axis=1)
+    resultado_consistencia = DadosSaaty(lamb, N)
+    st.markdown(f"**Resultado da Verificação de Consistência:** {resultado_consistencia}")
 
-# Se for consistente, calcular o vetor de pesos (autovalores e autovetores)
-if "Consistente" in resultado_consistencia:
-    l, v = VV(array_ahp)
-    st.write("Autovalor (l):", l)
-    st.write("Autovetor (v):", ' '.join(map(str, v)))
+    # Se for consistente, calcular o vetor de pesos (autovalores e autovetores)
+    if "Consistente" in resultado_consistencia:
+        l, v = VV(array_ahp)
+        st.write("Autovalor (l):", l)
+        st.write("Autovetor (v):", ' '.join(map(str, v)))
 
-# Gráfico da Matriz de Pesos
-st.subheader("1.4 - Gráfico da Matriz de Pesos")
-normalizada['Criterios'] = normalizada.index
-plt.figure(figsize=(22,2))  # largura e altura
-plt.title("Matriz de Pesos", fontsize=12)
-ax = sns.barplot(x='Criterios', y=v, data=normalizada)
+    # Pergunta ao usuário as comparações para as alternativas
+    st.subheader("2. Comparação das Alternativas")
 
-for p in ax.patches:
-    height = p.get_height()
-    ax.text(p.get_x() + p.get_width() / 2, height + 0.01, '{:1.2f}'.format(height), ha='center', fontsize=12)
+    try:
+        # Criação da matriz de resultados para todas as alternativas ponderadas pelos critérios
+        resultados_alternativas = np.zeros((num_alternativas, num_criterios))
 
-st.pyplot(plt)
+        # Coleta comparações de preferências entre as alternativas para cada critério
+        for crit_index, crit in enumerate(criterios):
+            st.write(f"Comparação de alternativas para o critério: {crit}")
+            matriz_alternativas = np.ones((num_alternativas, num_alternativas))
 
-# Pergunta ao usuário as comparações para as alternativas
-st.subheader("2. Comparação das Alternativas")
+            for i in range(num_alternativas):
+                for j in range(i + 1, num_alternativas):
+                    valor_alternativa = st.number_input(f"O quão preferível a alternativa {alternativas[i]} é em relação à alternativa {alternativas[j]} para o critério {crit} (escala 1-9)", min_value=1, max_value=9)
+                    matriz_alternativas[i, j] = valor_alternativa
+                    matriz_alternativas[j, i] = 1 / valor_alternativa
 
-try:
-    # Criação da matriz de resultados para todas as alternativas ponderadas pelos critérios
-    resultados_alternativas = np.zeros((num_alternativas, num_criterios))
+            # Normalizar a matriz de alternativas
+            df_matriz_alternativas = pd.DataFrame(matriz_alternativas, index=alternativas, columns=alternativas)
+            normalizada_alternativas = NormalizingConsistency(df_matriz_alternativas)
+            st.write(normalizada_alternativas)
 
-    # Coleta comparações de preferências entre as alternativas para cada critério
-    for crit_index, crit in enumerate(criterios):
-        st.write(f"Comparação de alternativas para o critério: {crit}")
-        matriz_alternativas = np.ones((num_alternativas, num_alternativas))
+            # Cálculo dos pesos das alternativas para este critério
+            _, pesos_alternativas = VV(normalizada_alternativas.to_numpy())
 
-        for i in range(num_alternativas):
-            for j in range(i + 1, num_alternativas):
-                valor_alternativa = st.number_input(f"O quão preferível a alternativa {alternativas[i]} é em relação à alternativa {alternativas[j]} para o critério {crit} (escala 1-9)", min_value=1, max_value=9)
-                matriz_alternativas[i, j] = valor_alternativa
-                matriz_alternativas[j, i] = 1 / valor_alternativa
+            # Armazenar os pesos das alternativas ponderados pelo peso do critério
+            resultados_alternativas[:, crit_index] = pesos_alternativas * v[crit_index]
 
-        # Normalizar a matriz de alternativas
-        df_matriz_alternativas = pd.DataFrame(matriz_alternativas, index=alternativas, columns=alternativas)
-        normalizada_alternativas = NormalizingConsistency(df_matriz_alternativas)
-        st.write(normalizada_alternativas)
+        # Cálculo dos pesos finais (somatório das alternativas ponderadas pelos critérios)
+        pesos_finais = np.sum(resultados_alternativas, axis=1)
+        df_resultado = pd.DataFrame(pesos_finais, index=alternativas, columns=["Peso Final"])
+        st.write(df_resultado)
 
-        # Cálculo dos pesos das alternativas para este critério
-        _, pesos_alternativas = VV(normalizada_alternativas.to_numpy())
+        # Gráfico do resultado final
+        st.subheader("4. Gráfico do Resultado Final")
+        plt.figure(figsize=(22,1))  # largura e altura
+        plt.title("Resultado Final - Pesos das Alternativas", fontsize=10)
+        ax = sns.barplot(x=df_resultado.index, y=df_resultado["Peso Final"], data=df_resultado)
 
-        # Armazenar os pesos das alternativas ponderados pelo peso do critério
-        resultados_alternativas[:, crit_index] = pesos_alternativas * v[crit_index]
+        for p in ax.patches:
+            height = p.get_height()
+            ax.text(p.get_x() + p.get_width() / 2, height + 0.01, '{:1.2f}'.format(height), ha='center', fontsize=12)
 
-    # Cálculo dos pesos finais (somatório das alternativas ponderadas pelos critérios)
-    pesos_finais = np.sum(resultados_alternativas, axis=1)
-    df_resultado = pd.DataFrame(pesos_finais, index=alternativas, columns=["Peso Final"])
-    st.write(df_resultado)
+        st.pyplot(plt)
 
-    # Gráfico do resultado final
-    st.subheader("4. Gráfico do Resultado Final")
-    plt.figure(figsize=(22,1))  # largura e altura
-    plt.title("Resultado Final - Pesos das Alternativas", fontsize=10)
-    ax = sns.barplot(x=df_resultado.index, y=df_resultado["Peso Final"], data=df_resultado)
-
-    for p in ax.patches:
-        height = p.get_height()
-        ax.text(p.get_x() + p.get_width() / 2, height + 0.01, '{:1.2f}'.format(height), ha='center', fontsize=12)
-
-    st.pyplot(plt)
-    
-except Exception as e:
-    st.error(f"Ocorreu um erro ao processar as comparações de alternativas: {e}")
+    except Exception as e:
+        st.error(f"Ocorreu um erro ao processar as comparações de alternativas: {e}")
