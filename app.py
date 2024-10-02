@@ -1,4 +1,4 @@
-import streamlit as st
+import streamlit as st 
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -32,7 +32,7 @@ def DadosSaaty(lamb, N):
 def VV(Consistencia):
     l, v = np.linalg.eig(Consistencia)
     v = v.T
-    i = np.where(l == np.max(l))[0][0]
+    i = np.argmax(l)
     l = l[i]
     v = v[i]
     v = v / np.sum(v)
@@ -94,7 +94,7 @@ def main():
                     Consistencia1 = normalizandocriterio.to_numpy()
                     l, v = VV(Consistencia1)
 
-                    # Verificação adicional para evitar erro
+                    # Verificação para evitar erro
                     if v is None or len(v) == 0:
                         st.error("Erro ao calcular os pesos dos critérios.")
                         return
@@ -160,7 +160,7 @@ def main():
                     # Vetores de peso dos critérios
                     pesos_criterios = v
 
-                    # Verificação adicional para evitar erro
+                    # Verificação para evitar erro
                     if pesos_criterios is None or len(pesos_criterios) == 0:
                         st.error("Erro ao calcular os pesos dos critérios na matriz final.")
                         return
