@@ -151,7 +151,7 @@ else:
 
         # Resultado final
         st.subheader("4. Resultado final")
-        plt.figure(figsize=(27,2))  # largura e altura
+        plt.figure(figsize=(27,4))  # largura e altura
         plt.title("Ranking das suas alternativas", fontsize=10)
         ax = sns.barplot(x=df_resultado.index, y=df_resultado["Peso Final"], data=df_resultado)
 
