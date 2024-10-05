@@ -60,6 +60,21 @@ def NormalizingConsistency(dataP):
         resultP[col] = resultP[col] / sum(resultP[col])
     return resultP
 
+#Para o calculo do grafico
+def calcular_importancia(df_normalizada):
+    # Calcula o total das linhas
+    total_linhas = df_normalizada.sum(axis=1)
+    
+    # Calcula a importância percentual de cada critério
+    importancia = (total_linhas / total_linhas.sum()) * 100
+    
+    # Adiciona as novas colunas na matriz
+    df_normalizada['Total das Linhas'] = total_linhas
+    df_normalizada['Importância (%)'] = importancia
+    
+    return df_normalizada
+    
+
 # Pergunta ao usuário o número de critérios e alternativas
 st.markdown("<h3 style='text-align: center; background-color: #6495ED;'> Estrutura hierárquica </h3>", unsafe_allow_html=True)
 
