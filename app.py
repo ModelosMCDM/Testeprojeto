@@ -157,7 +157,7 @@ else:
 
         # Aumentando o tamanho das legendas dos eixos
         #ax.set_xlabel("Alternativas", fontsize=18)  # Tamanho da fonte do eixo X
-        ax.set_ylabel("Peso Final", fontsize=18, pad=20)  # Tamanho da fonte do eixo Y
+        ax.set_ylabel("Peso Final", fontsize=18)  # Tamanho da fonte do eixo Y
         # Aumentar o tamanho da fonte das legendas dos eixos
         ax.tick_params(axis='x', labelsize=22)  # Tamanho da fonte para os rótulos do eixo X
         ax.tick_params(axis='y', labelsize=22)  # Tamanho da fonte para os rótulos do eixo Y
