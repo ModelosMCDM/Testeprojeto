@@ -128,24 +128,7 @@ else:
     st.subheader("1.3 - Matriz com Total das Linhas e Importância de Cada Critério")
     st.write(df_com_importancia)
 
-    # GRAFICO
-    criteriosgrafico = df_com_importancia.index.tolist()  # Obtendo os critérios a partir do índice da matriz
-    importancia = df_com_importancia['Importância (%)'].tolist()  # Obtendo as importâncias
-    
-    # Configuração do gráfico
-    plt.figure(figsize=(8, 6))
-    plt.barh(criteriosgrafico, importancia, color='skyblue')
-    plt.xlabel('Importância (%)')
-    plt.title('Importância de cada Critério')
-    plt.xlim(0, 100)  # Definindo o limite do eixo x
-    
-    # Adicionar os valores de importância no gráfico
-    for i, v in enumerate(importancia):
-        plt.text(v + 1, i, f"{v:.2f}%", va='center', color='blue', fontweight='bold')
-    
-    # Exibir o gráfico
-    plt.tight_layout()
-    plt.show()
+
 
 
 
