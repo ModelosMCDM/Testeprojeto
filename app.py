@@ -70,25 +70,6 @@ st.markdown("<h3 style='text-align: center; background-color: #6495ED;'> Estrutu
 st.markdown("<h6 style='text-align: center;'>Inicie informando qual a decisão a ser tomada </h6>", unsafe_allow_html=True)
 titulo_pesquisa = st.text_input("", "Digite aqui seu problema", key="titulo")
 
-# Para centralizar o texto do placeholder, podemos adicionar um estilo adicional (não é garantido em todos os casos)
-st.markdown(
-    """
-    <style>
-    .text-input {
-        text-align: center;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-
-# Adicionando um campo de entrada com uma classe CSS para centralizar o texto
-st.markdown(
-    '<div class="text-input">{}</div>'.format(titulo_pesquisa),
-    unsafe_allow_html=True
-)
-
-
 num_alternativas = st.number_input("Quantas alternativas serão analisadas?", min_value=2, step=1)
 alternativas = []
 for i in range(num_alternativas):
