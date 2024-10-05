@@ -129,9 +129,6 @@ else:
     st.write(df_com_importancia)
 
 
-
-
-
     # Cálculo de consistência
     st.subheader("1.4 - Verificação de Consistência")
     array_ahp = normalizada.to_numpy()
