@@ -159,5 +159,7 @@ else:
             height = p.get_height()
             ax.text(p.get_x() + p.get_width() / 2, height + 0.01, '{:1.2f}'.format(height), ha='center', fontsize=14)
 
+    plt.show()
+    
     except Exception as e:
         st.error(f"Ocorreu um erro ao processar as comparações de alternativas: {e}")
