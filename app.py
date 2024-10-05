@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-sns.set(style="whitegrid")
+sns.set(style="darkgrid")
 backgroundColor = "#ADD8E6"
 
 # Configuração inicial da página
@@ -130,8 +130,6 @@ else:
     # Exibindo a nova matriz com as colunas adicionais
     st.subheader("1.3 - Matriz com Total das Linhas e Importância de Cada Critério")
     st.write(df_com_importancia)
-
-    #sns.set(style="whitegrid")
 
     # Tamanho da figura
     plt.figure(figsize=(27, 8))
