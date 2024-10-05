@@ -245,7 +245,7 @@ else:
 
 
 
-df_resultado = df_resultado.set_index('alternativas')
+df_resultado = df_resultado.set_index('Peso Final')
 
 titulo_pesquisa = "Melhoria de Processo"  # Apenas um exemplo
 
