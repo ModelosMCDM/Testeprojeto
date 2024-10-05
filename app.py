@@ -131,34 +131,34 @@ else:
     st.subheader("1.3 - Matriz com Total das Linhas e Importância de Cada Critério")
     st.write(df_com_importancia)
 
-sns.set(style="whitegrid")
+#sns.set(style="whitegrid")
 
     # Tamanho da figura
     plt.figure(figsize=(10, 6))
-    # Gerando o gráfico de barras com os valores de importância (%)
+    
     ax = sns.barplot(x=df_com_importancia.index, y=df_com_importancia['Importância (%)'], palette="viridis")
+
     # Adicionando o título ao gráfico
     plt.title("Importância de Cada Critério", fontsize=16, pad=20)
+
     # Nomeando os eixos
     ax.set_xlabel("Critérios", fontsize=14)
     ax.set_ylabel("Importância (%)", fontsize=14)
+
     # Ajustando o tamanho dos rótulos dos eixos
     ax.tick_params(axis='x', labelsize=12)
     ax.tick_params(axis='y', labelsize=12)
+
     # Exibindo os valores de importância no topo de cada barra
     for p in ax.patches:
         height = p.get_height()
         ax.text(p.get_x() + p.get_width() / 2., height + 0.5, '{:1.2f}'.format(height), ha="center", fontsize=12)
     
     # Exibir o gráfico
-    plt.show()
+    st.pyplot(plt) 
 
 
-
-
-
-
-    
+   
     
     # Cálculo de consistência
     st.subheader("1.4 - Verificação de Consistência")
