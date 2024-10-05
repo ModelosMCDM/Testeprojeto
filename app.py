@@ -67,7 +67,7 @@ st.markdown("<h3 style='text-align: center; background-color: #6495ED;'> Estrutu
 
 # Caixa de texto para o usuário digitar o título da pesquisa
 #titulo_pesquisa = st.text_input("Digite o título da pesquisa:", "Ranking das suas alternativas prioritárias")
-st.markdown("<h3 style='text-align: center;'>Digite o título da pesquisa:</h3>", unsafe_allow_html=True)
+st.markdown("<h2 style='text-align: center;'>Inicie digitanto qual a decisão a ser tomada </h2>", unsafe_allow_html=True)
 titulo_pesquisa = st.text_input("", "Ranking das suas alternativas prioritárias", key="titulo")
 
 
