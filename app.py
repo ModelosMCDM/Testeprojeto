@@ -66,8 +66,8 @@ st.markdown("<h3 style='text-align: center; background-color: #6495ED;'> Estrutu
 
 
 # Exibindo o texto em negrito acima do campo de entrada
-st.markdown("<strong>Digite o título da pesquisa:</strong>", unsafe_allow_html=True)
-titulo_pesquisa = st.text_input("", "Inicie informando qual a decisão a ser tomada")
+st.markdown("<strong>Inicie informando qual a decisão a ser tomada</strong>")
+titulo_pesquisa = st.text_input("", "Digite aqui o título da pesquisa")
 
 num_alternativas = st.number_input("Quantas alternativas serão analisadas?", min_value=2, step=1)
 alternativas = []
