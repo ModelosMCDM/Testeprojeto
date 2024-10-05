@@ -65,10 +65,10 @@ def NormalizingConsistency(dataP):
 st.markdown("<h3 style='text-align: center; background-color: #6495ED;'> Estrutura hierárquica </h3>", unsafe_allow_html=True)
 
 
+# Exibindo o texto em negrito acima do campo de entrada
+st.markdown("<strong>Digite o título da pesquisa:</strong>", unsafe_allow_html=True)
 # Caixa de texto para o usuário digitar o título da pesquisa
-titulo_pesquisa = st.text_input("Digite o título da pesquisa:", "Inicie informando qual a decisão a ser tomada")
-#"st.markdown("<h6 style='text-align: center;'>Inicie informando qual a decisão a ser tomada </h6>", unsafe_allow_html=True)
-#"titulo_pesquisa = st.text_input("", "Digite aqui", key="titulo")
+titulo_pesquisa = st.text_input("", "Inicie informando qual a decisão a ser tomada")
 
 num_alternativas = st.number_input("Quantas alternativas serão analisadas?", min_value=2, step=1)
 alternativas = []
