@@ -117,15 +117,15 @@ else:
     st.write(df_matriz_comparacao)
 
     # Normalizando a matriz de comparação
-    #st.subheader("1.2 - Normalizando a Matriz de Comparação")
+    st.subheader("1.2 - Normalizando a Matriz de Comparação")
     normalizada = NormalizingConsistency(df_matriz_comparacao)
-    #st.write(normalizada)
+    st.write(normalizada)
 
     # Fazer uma cópia da matriz normalizada para uso posterior
     normalizada_copia = normalizada.copy()
 
-     # Aplicando a função na matriz normalizada
-    #df_com_importancia = calcular_importancia(normalizada_copia)
+    # Aplicando a função na matriz normalizada
+    df_com_importancia = calcular_importancia(normalizada_copia)
 
     # Exibindo a nova matriz com as colunas adicionais
     st.subheader("1.3 - Matriz normalizada com Total e Grau de Importância de Cada Critério")
