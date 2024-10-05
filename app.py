@@ -152,18 +152,12 @@ else:
        # Resultado final
         st.subheader("4. Resultado final")
         plt.figure(figsize=(27,8))  # largura e altura
-        plt.title("Ranking das suas alternativas prioritárias", fontsize=20)  # Aumente o tamanho da fonte aqui
+        plt.title("Ranking das suas alternativas prioritárias", fontsize=16)
         ax = sns.barplot(x=df_resultado.index, y=df_resultado["Peso Final"], data=df_resultado)
-        
-        # Aumentando o tamanho das legendas dos eixos
-        ax.set_xlabel("Alternativas", fontsize=18)  # Tamanho da fonte do eixo X
-        ax.set_ylabel("Peso Final", fontsize=18)  # Tamanho da fonte do eixo Y
-        
+
         for p in ax.patches:
             height = p.get_height()
-            ax.text(p.get_x() + p.get_width() / 2, height + 0.01, '{:1.2f}'.format(height), ha='center', fontsize=16)  # Aumente aqui se necessário
-        
-        plt.show()  # Não esqueça de exibir o gráfico
+            ax.text(p.get_x() + p.get_width() / 2, height + 0.01, '{:1.2f}'.format(height), ha='center', fontsize=14)
 
     except Exception as e:
         st.error(f"Ocorreu um erro ao processar as comparações de alternativas: {e}")
