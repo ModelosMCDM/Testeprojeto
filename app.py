@@ -78,6 +78,11 @@ def calcular_importancia(df_normalizada):
 # Pergunta ao usuário o número de critérios e alternativas
 st.markdown("<h3 style='text-align: center; background-color: #6495ED;'> Estrutura hierárquica </h3>", unsafe_allow_html=True)
 
+# Exibindo o texto em negrito acima do campo de entrada
+st.markdown("<strong>Inicie informando qual a decisão a ser tomada</strong>", unsafe_allow_html=True)
+titulo_pesquisa = st.text_input("Digite aqui o título da pesquisa")
+
+
 num_alternativas = st.number_input("Quantas alternativas serão analisadas?", min_value=2, step=1)
 alternativas = []
 for i in range(num_alternativas):
