@@ -88,7 +88,7 @@ else:
     # Entrada dos valores de comparação
     for i in range(num_criterios):
         for j in range(i + 1, num_criterios):
-            valor_comparacao = st.number_input(f"Comparação de importância: {criterios[i]} vs {criterios[j]} (escala 1-9)", min_value=1, max_value=9)
+                valor_comparacao = st.number_input(f"Para você o quanto o critério {criterios[i]} é mais importante que  {criterios[j]} (escala 1-9)", min_value=1, max_value=9)
             matriz_comparacao_criterios[i, j] = valor_comparacao
             matriz_comparacao_criterios[j, i] = 1 / valor_comparacao
 
