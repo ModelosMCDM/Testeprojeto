@@ -134,14 +134,10 @@ else:
 #sns.set(style="whitegrid")
 
     # Tamanho da figura
-    plt.figure(figsize=(10, 6))
-    
+    plt.figure(figsize=(27, 8))
     ax = sns.barplot(x=df_com_importancia.index, y=df_com_importancia['Importância (%)'], palette="viridis")
-
-    # Adicionando o título ao gráfico
     plt.title("Importância de Cada Critério", fontsize=16, pad=20)
 
-    # Nomeando os eixos
     ax.set_xlabel("Critérios", fontsize=14)
     ax.set_ylabel("Importância (%)", fontsize=14)
 
