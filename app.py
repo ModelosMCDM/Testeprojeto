@@ -160,7 +160,7 @@ else:
         # ax.set_ylabel("Peso Final", fontsize=30)  # Tamanho da fonte do eixo Y
         # Aumentar o tamanho da fonte das legendas dos eixos
         ax.tick_params(axis='x', labelsize=30)  # Tamanho da fonte para os rótulos do eixo X
-        #ax.tick_params(axis='y', labelsize=30)  # Tamanho da fonte para os rótulos do eixo Y
+        ax.tick_params(axis='y', labelsize=30)  # Tamanho da fonte para os rótulos do eixo Y
 
         for p in ax.patches:
             height = p.get_height()
