@@ -240,33 +240,6 @@ else:
             ax.text(p.get_x() + p.get_width() / 2, height + 0.01, '{:1.2f}'.format(height), ha='center', fontsize=34)
         st.pyplot(plt)  
 
-     st.write( "TESTANDO" ) # insere texto informativo
-        df_resultado = df_resultado.set_index('Alternativa')
-        
-        # Dados do gráfico de radar
-        categorias = df_resultado.index
-        valores = df_resultado["Peso Final"].values
-        
-        # Preparando os dados para o gráfico de radar
-        valores = np.concatenate((valores, [valores[0]]))  # Fecha o gráfico
-        angulos = np.linspace(0, 2 * np.pi, len(categorias), endpoint=False).tolist()
-        angulos += angulos[:1]  # Fecha o gráfico
-        
-        # Criando a figura do gráfico de radar
-        fig, ax = plt.subplots(figsize=(8, 8), subplot_kw=dict(polar=True))
-        ax.fill(angulos, valores, color='blue', alpha=0.25)
-        ax.plot(angulos, valores, color='blue', linewidth=2)
-        
-        # Adicionando as categorias
-        ax.set_yticklabels([])
-        ax.set_xticks(angulos[:-1])
-        ax.set_xticklabels(categorias, fontsize=15)
-        
-        # Título
-        plt.title(f"Ranking das alternativas para: {titulo_pesquisa}", size=20, color='blue', y=1.1)
-        
-        # Exibir no Streamlit
-        st.pyplot(fig)
 
     except Exception as e:
         st.error(f"Ocorreu um erro ao processar as comparações de alternativas: {e}")
