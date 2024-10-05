@@ -244,14 +244,6 @@ else:
         st.error(f"Ocorreu um erro ao processar as comparações de alternativas: {e}")
 
 
-st.write( "TESTET ETETETETTETETE exemplo" ) # insere texto informativo 
-# Exemplo de DataFrame com dados fictícios
-df_resultadosss = pd.DataFrame({
-    'Alternativa': ['A', 'B', 'C', 'D', 'E'],
-    'Peso Final': [0.2, 0.4, 0.1, 0.3, 0.5]
-})
-df_resultadosss = df_resultadosss.set_index('Alternativa')
-
 titulo_pesquisa = "Melhoria de Processo"  # Apenas um exemplo
 
 # Função para atualizar o gráfico em cada frame
@@ -261,10 +253,10 @@ def update(num):
     plt.title(f"Ranking para problema de: {titulo_pesquisa}", fontsize=36, pad=45)
 
     # Atualiza os dados com uma leve mudança para criar o efeito de animação
-    df_resultadosss['Peso Final'] = df_resultadosss['Peso Final'].sample(frac=1).reset_index(drop=True)
+    df_resultado['Peso Final'] = df_resultado['Peso Final'].sample(frac=1).reset_index(drop=True)
 
     # Desenha o gráfico com as barras atualizadas
-    ax = sns.barplot(x=df_resultadosss.index, y=df_resultadosss["Peso Final"], palette="viridis")
+    ax = sns.barplot(x=df_resultado.index, y=df_resultado["Peso Final"], palette="viridis")
 
     # Aumenta o tamanho das legendas dos eixos
     ax.set_ylabel("Peso Final", fontsize=30)  # Tamanho da fonte do eixo Y
