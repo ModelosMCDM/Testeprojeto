@@ -130,7 +130,7 @@ else:
 
 
     # Cálculo de consistência
-    st.subheader("1.4 - Verificação de Consistência")
+    st.subheader("1.3 - Verificação de Consistência")
     array_ahp = normalizada.to_numpy()
     N = len(array_ahp)
     lamb = np.sum(array_ahp, axis=1)
