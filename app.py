@@ -152,19 +152,19 @@ else:
        # Resultado final
         st.subheader("4. Resultado final")
         plt.figure(figsize=(27,8))  # largura e altura
-        plt.title("Ranking das suas alternativas prioritárias", fontsize=20, pad=20)
+        plt.title("Ranking das suas alternativas prioritárias", fontsize=26, pad=20)
         ax = sns.barplot(x=df_resultado.index, y=df_resultado["Peso Final"], data=df_resultado, palette="viridis")
 
         # Aumentando o tamanho das legendas dos eixos
         #ax.set_xlabel("Alternativas", fontsize=18)  # Tamanho da fonte do eixo X
-        ax.set_ylabel("Peso Final", fontsize=18)  # Tamanho da fonte do eixo Y
+        ax.set_ylabel("Peso Final", fontsize=22)  # Tamanho da fonte do eixo Y
         # Aumentar o tamanho da fonte das legendas dos eixos
         ax.tick_params(axis='x', labelsize=22)  # Tamanho da fonte para os rótulos do eixo X
         ax.tick_params(axis='y', labelsize=22)  # Tamanho da fonte para os rótulos do eixo Y
 
         for p in ax.patches:
             height = p.get_height()
-            ax.text(p.get_x() + p.get_width() / 2, height + 0.01, '{:1.2f}'.format(height), ha='center', fontsize=16)
+            ax.text(p.get_x() + p.get_width() / 2, height + 0.01, '{:1.2f}'.format(height), ha='center', fontsize=20)
 
         st.pyplot(plt)  
     
