@@ -121,6 +121,13 @@ else:
     normalizada = NormalizingConsistency(df_matriz_comparacao)
     st.write(normalizada)
 
+     # Aplicando a função na matriz normalizada
+    df_com_importancia = calcular_importancia(normalizada)
+
+    # Exibindo a nova matriz com as colunas adicionais
+    st.subheader("1.3 - Matriz com Total das Linhas e Importância de Cada Critério")
+    st.write(df_com_importancia)
+
     # Cálculo de consistência
     st.subheader("1.3 - Verificação de Consistência")
     array_ahp = normalizada.to_numpy()
