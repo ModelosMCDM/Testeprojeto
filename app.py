@@ -29,20 +29,6 @@ html_temp = """
 """
 st.markdown(html_temp, unsafe_allow_html=True)
 
-# Calculando o total das linhas e a importância de cada critério
-def calcular_importancia(df_normalizada):
-    # Calcula o total das linhas
-    total_linhas = df_normalizada.sum(axis=1)
-    
-    # Calcula a importância percentual de cada critério
-    importancia = (total_linhas / total_linhas.sum()) * 100
-    
-    # Adiciona as novas colunas na matriz
-    df_normalizada['Total das Linhas'] = total_linhas
-    df_normalizada['Importância (%)'] = importancia
-    
-    return df_normalizada
-    
 # Função de consistência de Saaty
 def DadosSaaty(lamb, N):
     ri = np.array([0, 0, 0.58, 0.9, 1.12, 1.32, 1.35, 1.41, 1.45, 1.49, 1.52, 1.54, 1.56, 1.58, 1.59])
@@ -74,14 +60,8 @@ def NormalizingConsistency(dataP):
         resultP[col] = resultP[col] / sum(resultP[col])
     return resultP
 
-# PerguntaNndo ao usuário o número de critérios e alternativas
-
+# Pergunta ao usuário o número de critérios e alternativas
 st.markdown("<h3 style='text-align: center; background-color: #6495ED;'> Estrutura hierárquica </h3>", unsafe_allow_html=True)
-
-
-# Exibindo o texto em negrito acima do campo de entrada
-st.markdown("<strong>Inicie informando qual a decisão a ser tomada</strong>", unsafe_allow_html=True)
-titulo_pesquisa = st.text_input("Digite aqui o título da pesquisa")
 
 num_alternativas = st.number_input("Quantas alternativas serão analisadas?", min_value=2, step=1)
 alternativas = []
@@ -120,14 +100,6 @@ else:
     st.subheader("1.2 - Normalizando a Matriz de Comparação")
     normalizada = NormalizingConsistency(df_matriz_comparacao)
     st.write(normalizada)
-
-    # Aplicando a função na matriz normalizada
-    df_com_importancia = calcular_importancia(normalizada)
-
-    # Exibindo a nova matriz com as colunas adicionais
-    st.subheader("1.3 - Matriz com Total das Linhas e Importância de Cada Critério")
-    st.write(df_com_importancia)
-
 
     # Cálculo de consistência
     st.subheader("1.3 - Verificação de Consistência")
@@ -180,7 +152,7 @@ else:
        # Resultado final
         st.subheader("4. Resultado final")
         plt.figure(figsize=(27,8))  # largura e altura
-        plt.title(titulo_pesquisa, fontsize=36, pad=40)
+        plt.title("Ranking das suas alternativas prioritárias", fontsize=36, pad=25)
         ax = sns.barplot(x=df_resultado.index, y=df_resultado["Peso Final"], data=df_resultado, palette="viridis")
 
         # Aumentando o tamanho das legendas dos eixos
