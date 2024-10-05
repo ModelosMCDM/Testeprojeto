@@ -129,7 +129,7 @@ else:
 
             for i in range(num_alternativas):
                 for j in range(i + 1, num_alternativas):
-                    valor_alternativa = st.number_input(f"O quão preferível a alternativa {alternativas[i]} é em relação à alternativa {alternativas[j]} para o critério {crit} (escala 1-9)", min_value=1, max_value=9)
+                    valor_alternativa = st.number_input(f"O quão preferível é {alternativas[i]} é em relação à {alternativas[j]} para o critério {crit} (escala 1-9)", min_value=1, max_value=9)
                     matriz_alternativas[i, j] = valor_alternativa
                     matriz_alternativas[j, i] = 1 / valor_alternativa
 
