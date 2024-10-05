@@ -117,18 +117,18 @@ else:
     st.write(df_matriz_comparacao)
 
     # Normalizando a matriz de comparação
-    st.subheader("1.2 - Normalizando a Matriz de Comparação")
+    #st.subheader("1.2 - Normalizando a Matriz de Comparação")
     normalizada = NormalizingConsistency(df_matriz_comparacao)
-    st.write(normalizada)
+    #st.write(normalizada)
 
     # Fazer uma cópia da matriz normalizada para uso posterior
     normalizada_copia = normalizada.copy()
 
      # Aplicando a função na matriz normalizada
-    df_com_importancia = calcular_importancia(normalizada_copia)
+    #df_com_importancia = calcular_importancia(normalizada_copia)
 
     # Exibindo a nova matriz com as colunas adicionais
-    st.subheader("1.3 - Matriz com Total das Linhas e Importância de Cada Critério")
+    st.subheader("1.3 - Matriz normalizada com Total e Grau de Importância de Cada Critério")
     st.write(df_com_importancia)
 
     # Tamanho da figura
@@ -206,7 +206,7 @@ else:
         st.subheader("4. Resultado final")
         plt.figure(figsize=(27,8))  # largura e altura
         #plt.title("Ranking das suas alternativas prioritárias", fontsize=36, pad=25)
-        plt.title(f"Ranking para problema de: {titulo_pesquisa}", fontsize=36, pad=25)
+        plt.title(f"Ranking para problema de: {titulo_pesquisa}", fontsize=36, pad=45)
         ax = sns.barplot(x=df_resultado.index, y=df_resultado["Peso Final"], data=df_resultado, palette="viridis")
 
         # Aumentando o tamanho das legendas dos eixos
