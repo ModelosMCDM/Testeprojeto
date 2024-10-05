@@ -277,5 +277,9 @@ def update(num):
 fig = plt.figure(figsize=(27, 8))
 anim = FuncAnimation(fig, update, frames=10, repeat=False)
 
-# Exibir a animação no Streamlit
-st.pyplot(fig)
+# Salvar a animação em um arquivo temporário como GIF
+with tempfile.NamedTemporaryFile(suffix=".gif", delete=False) as tmpfile:
+    anim.save(tmpfile.name, writer='imagemagick')
+
+# Exibir o GIF no Streamlit
+st.image(tmpfile.name)
