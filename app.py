@@ -88,7 +88,7 @@ else:
     # Entrada dos valores de comparação
     for i in range(num_criterios):
         for j in range(i + 1, num_criterios):
-            valor_comparacao = st.number_input(f"Para você, o quanto: {criterios[i]} é mais importante do que o(a) {criterios[j]} (escala 1-9)", min_value=1, max_value=9)
+            valor_comparacao = st.number_input(f"Comparação de importância: {criterios[i]} vs {criterios[j]} (escala 1-9)", min_value=1, max_value=9)
             matriz_comparacao_criterios[i, j] = valor_comparacao
             matriz_comparacao_criterios[j, i] = 1 / valor_comparacao
 
@@ -129,7 +129,7 @@ else:
 
             for i in range(num_alternativas):
                 for j in range(i + 1, num_alternativas):
-                    valor_alternativa = st.number_input(f"O quão preferível  {alternativas[i]} é, em relação à alternativa {alternativas[j]} para o critério {crit} (escala 1-9)", min_value=1, max_value=9)
+                    valor_alternativa = st.number_input(f"O quão preferível a alternativa {alternativas[i]} é em relação à alternativa {alternativas[j]} para o critério {crit} (escala 1-9)", min_value=1, max_value=9)
                     matriz_alternativas[i, j] = valor_alternativa
                     matriz_alternativas[j, i] = 1 / valor_alternativa
 
@@ -149,24 +149,17 @@ else:
         df_resultado = pd.DataFrame(pesos_finais, index=alternativas, columns=["Peso Final"])
         st.write(df_resultado)
 
-       # Resultado final
+        # Resultado final
         st.subheader("4. Resultado final")
-        plt.figure(figsize=(27,8))  # largura e altura
-        plt.title("Ranking das suas alternativas prioritárias", fontsize=26, pad=20)
-        ax = sns.barplot(x=df_resultado.index, y=df_resultado["Peso Final"], data=df_resultado, palette="viridis")
-
-        # Aumentando o tamanho das legendas dos eixos
-        #ax.set_xlabel("Alternativas", fontsize=18)  # Tamanho da fonte do eixo X
-        ax.set_ylabel("Peso Final", fontsize=22)  # Tamanho da fonte do eixo Y
-        # Aumentar o tamanho da fonte das legendas dos eixos
-        ax.tick_params(axis='x', labelsize=22)  # Tamanho da fonte para os rótulos do eixo X
-        ax.tick_params(axis='y', labelsize=22)  # Tamanho da fonte para os rótulos do eixo Y
+        plt.figure(figsize=(27,4))  # largura e altura
+        plt.title("Ranking das suas alternativas", fontsize=14)
+        ax = sns.barplot(x=df_resultado.index, y=df_resultado["Peso Final"], data=df_resultado)
 
         for p in ax.patches:
             height = p.get_height()
-            ax.text(p.get_x() + p.get_width() / 2, height + 0.01, '{:1.2f}'.format(height), ha='center', fontsize=20)
+            ax.text(p.get_x() + p.get_width() / 2, height + 0.01, '{:1.2f}'.format(height), ha='center', fontsize=14)
 
-        st.pyplot(plt)  
-    
+        st.pyplot(plt)
+
     except Exception as e:
         st.error(f"Ocorreu um erro ao processar as comparações de alternativas: {e}")
