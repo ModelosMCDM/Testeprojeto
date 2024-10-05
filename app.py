@@ -60,11 +60,15 @@ def NormalizingConsistency(dataP):
         resultP[col] = resultP[col] / sum(resultP[col])
     return resultP
 
-# Pergunta ao usuário o número de critérios e alternativas
+# PerguntaNndo ao usuário o número de critérios e alternativas
+
 st.markdown("<h3 style='text-align: center; background-color: #6495ED;'> Estrutura hierárquica </h3>", unsafe_allow_html=True)
 
+
 # Caixa de texto para o usuário digitar o título da pesquisa
-titulo_pesquisa = st.text_input("Digite o título da pesquisa:", "Ranking das suas alternativas prioritárias")
+#titulo_pesquisa = st.text_input("Digite o título da pesquisa:", "Ranking das suas alternativas prioritárias")
+st.markdown("<h3 style='text-align: center;'>Digite o título da pesquisa:</h3>", unsafe_allow_html=True)
+titulo_pesquisa = st.text_input("", "Ranking das suas alternativas prioritárias", key="titulo")
 
 
 num_alternativas = st.number_input("Quantas alternativas serão analisadas?", min_value=2, step=1)
@@ -156,7 +160,7 @@ else:
        # Resultado final
         st.subheader("4. Resultado final")
         plt.figure(figsize=(27,8))  # largura e altura
-        plt.title(titulo_pesquisa, fontsize=36, pad=20)
+        plt.title(titulo_pesquisa, fontsize=36, pad=40)
         ax = sns.barplot(x=df_resultado.index, y=df_resultado["Peso Final"], data=df_resultado, palette="viridis")
 
         # Aumentando o tamanho das legendas dos eixos
