@@ -101,9 +101,7 @@ st.markdown("<strong>Inicie informando qual a decisão a ser tomada</strong>", u
 titulo_pesquisa = st.text_input("Digite aqui o título da pesquisa")
 
 
-#num_alternativas = st.number_input("Quantas alternativas serão analisadas?", min_value=2, step=1)
-st.markdown("<strong>Quantas alternativas serão analisadas?</strong>", unsafe_allow_html=True)
-num_alternativas = st.number_input("", min_value=2)
+num_alternativas = st.number_input("Quantas alternativas serão analisadas?", min_value=2, step=1)
 st.write(f"Você selecionou {num_alternativas} alternativas.")
 
 alternativas = []
