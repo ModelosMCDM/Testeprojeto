@@ -94,7 +94,7 @@ st.markdown(html_temp, unsafe_allow_html=True)
 # Pergunta ao usuário o número de critérios e alternativas
 st.markdown("<h3 style='text-align: center; background-color: #6495ED;'> Estrutura hierárquica </h3>", unsafe_allow_html=True)
 
-st.subheader("1.1 - Alimentando o sistema")
+st.subheader("1 - Alimentando o sistema")
 
 # Exibindo o texto em negrito acima do campo de entrada
 st.markdown("<strong>Inicie informando qual a decisão a ser tomada</strong>", unsafe_allow_html=True)
@@ -122,7 +122,7 @@ elif any(alternativa == '' for alternativa in alternativas):
     st.error("Por favor, preencha todas as alternativas.")
 else:
     # Gerar matriz de comparação dos critérios
-    st.subheader("1.2 - Matriz de Comparação dos Critérios")
+    st.subheader("1.1 - Matriz de Comparação dos Critérios")
     matriz_comparacao_criterios = np.ones((num_criterios, num_criterios))
 
     # Entrada dos valores de comparação
@@ -138,7 +138,7 @@ else:
     st.write(df_matriz_comparacao)
 
     # Normalizando a matriz de comparação
-    #st.subheader("1.2 - Normalizando a Matriz de Comparação")
+    #st.subheader("1.1 - Normalizando a Matriz de Comparação")
     normalizada = NormalizingConsistency(df_matriz_comparacao)
     #st.write(normalizada)
 
@@ -149,12 +149,12 @@ else:
     df_com_importancia = calcular_importancia(normalizada_copia)
 
     # Exibindo a nova matriz com as colunas adicionais
-    st.subheader("1.3 - Matriz normalizada com somatório dos pesos e Grau de Importância de Cada Critério")
+    st.subheader("1.2 - Matriz normalizada com somatório dos pesos e Grau de Importância de Cada Critério")
     st.write(df_com_importancia)
 
     # Tamanho da figura
     plt.figure(figsize=(27, 8))
-    ax = sns.barplot(x=df_com_importancia.index, y=df_com_importancia['Importância (%)'], palette="viridis")
+    ax = sns.barplot(x=df_com_importancia.index, y=df_com_importancia['Importância (%)'], palette="Spectral")
     plt.title("Importância de Cada Critério", fontsize=36, pad=45)
 
     ax.set_xlabel("Critérios", fontsize=18)
@@ -174,7 +174,7 @@ else:
 
     
     # Cálculo de consistência
-    st.subheader("1.4 - Verificação de Consistência")
+    st.subheader("1.3 - Verificação de Consistência")
     array_ahp = normalizada.to_numpy()
     N = len(array_ahp)
     lamb = np.sum(array_ahp, axis=1)
@@ -224,9 +224,8 @@ else:
        # Resultado final
         st.subheader("4. Resultado final")
         plt.figure(figsize=(27,8))  # largura e altura
-        #plt.title("Ranking das suas alternativas prioritárias", fontsize=36, pad=25)
         plt.title(f"Ranking para problema de: {titulo_pesquisa}", fontsize=36, pad=45)
-        ax = sns.barplot(x=df_resultado.index, y=df_resultado["Peso Final"], data=df_resultado, palette="viridis")
+        ax = sns.barplot(x=df_resultado.index, y=df_resultado["Peso Final"], data=df_resultado, palette="rocket")
 
         # Aumentando o tamanho das legendas dos eixos
         # ax.set_xlabel("Alternativas", fontsize=18)  # Tamanho da fonte do eixo X
