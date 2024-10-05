@@ -103,8 +103,9 @@ titulo_pesquisa = st.text_input("Digite aqui o título da pesquisa")
 
 #num_alternativas = st.number_input("Quantas alternativas serão analisadas?", min_value=2, step=1)
 # Adicionando o título em negrito
-st.markdown("<strong>Quantas alternativas serão analisadas?</strong>")
+st.markdown("<strong>Quantas alternativas serão analisadas?</strong>", unsafe_allow_html=True)
 num_alternativas = st.number_input("", min_value=2, step=1)
+st.write(f"Você selecionou {num_alternativas} alternativas.")
 
 alternativas = []
 for i in range(num_alternativas):
