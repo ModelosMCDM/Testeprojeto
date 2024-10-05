@@ -28,7 +28,6 @@ html_temp = """
 </div>
 
 """
-st.markdown(html_temp, unsafe_allow_html=True)
 
 # Função de consistência de Saaty
 def DadosSaaty(lamb, N):
@@ -74,7 +73,23 @@ def calcular_importancia(df_normalizada):
     df_normalizada['Importância (%)'] = importancia
     
     return df_normalizada
-    
+
+# Adicionando estilo customizado para o campo de entrada
+st.markdown(
+    """
+    <style>
+    /* Estilizando o campo de entrada de texto */
+    .stTextInput > div > div > input {
+        background-color: #F0F8FF; /* Cor de fundo do campo de texto */
+        color: #000000; /* Cor do texto inserido */
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+#######INICIO#####
+st.markdown(html_temp, unsafe_allow_html=True)
 
 # Pergunta ao usuário o número de critérios e alternativas
 st.markdown("<h3 style='text-align: center; background-color: #6495ED;'> Estrutura hierárquica </h3>", unsafe_allow_html=True)
