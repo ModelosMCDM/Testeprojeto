@@ -78,6 +78,8 @@ def calcular_importancia(df_normalizada):
 # Pergunta ao usuário o número de critérios e alternativas
 st.markdown("<h3 style='text-align: center; background-color: #6495ED;'> Estrutura hierárquica </h3>", unsafe_allow_html=True)
 
+st.subheader("1.1 - Alimentando o sistema")
+
 # Exibindo o texto em negrito acima do campo de entrada
 st.markdown("<strong>Inicie informando qual a decisão a ser tomada</strong>", unsafe_allow_html=True)
 titulo_pesquisa = st.text_input("Digite aqui o título da pesquisa")
@@ -102,7 +104,7 @@ elif any(alternativa == '' for alternativa in alternativas):
     st.error("Por favor, preencha todas as alternativas.")
 else:
     # Gerar matriz de comparação dos critérios
-    st.subheader("1.1 - Matriz de Comparação dos Critérios")
+    st.subheader("1.2 - Matriz de Comparação dos Critérios")
     matriz_comparacao_criterios = np.ones((num_criterios, num_criterios))
 
     # Entrada dos valores de comparação
@@ -128,7 +130,7 @@ else:
     df_com_importancia = calcular_importancia(normalizada_copia)
 
     # Exibindo a nova matriz com as colunas adicionais
-    st.subheader("1.3 - Matriz normalizada com Total e Grau de Importância de Cada Critério")
+    st.subheader("1.3 - Matriz normalizada com somatório dos pesos e Grau de Importância de Cada Critério")
     st.write(df_com_importancia)
 
     # Tamanho da figura
@@ -151,8 +153,6 @@ else:
     # Exibir o gráfico
     st.pyplot(plt) 
 
-
-   
     
     # Cálculo de consistência
     st.subheader("1.4 - Verificação de Consistência")
