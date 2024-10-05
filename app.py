@@ -126,6 +126,7 @@ else:
     # Fazer uma cópia da matriz normalizada para uso posterior
     normalizada_copia = normalizada.copy()
 
+    st.markdown("Matriz de comparação dos pesos", unsafe_allow_html=True)
     # Aplicando a função na matriz normalizada
     df_com_importancia = calcular_importancia(normalizada_copia)
 
