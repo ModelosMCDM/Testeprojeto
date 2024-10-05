@@ -225,7 +225,7 @@ else:
         st.subheader("4. Resultado final")
         plt.figure(figsize=(27,8))  # largura e altura
         plt.title(f"Ranking para problema de: {titulo_pesquisa}", fontsize=36, pad=45)
-        ax = sns.barplot(x=df_resultado.index, y=df_resultado["Peso Final"], data=df_resultado, palette="rocket")
+        ax = sns.barplot(x=df_resultado.index, y=df_resultado["Peso Final"], data=df_resultado, palette="viridis")
 
         # Aumentando o tamanho das legendas dos eixos
         # ax.set_xlabel("Alternativas", fontsize=18)  # Tamanho da fonte do eixo X
