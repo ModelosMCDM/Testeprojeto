@@ -29,6 +29,20 @@ html_temp = """
 """
 st.markdown(html_temp, unsafe_allow_html=True)
 
+# Calculando o total das linhas e a importância de cada critério
+def calcular_importancia(df_normalizada):
+    # Calcula o total das linhas
+    total_linhas = df_normalizada.sum(axis=1)
+    
+    # Calcula a importância percentual de cada critério
+    importancia = (total_linhas / total_linhas.sum()) * 100
+    
+    # Adiciona as novas colunas na matriz
+    df_normalizada['Total das Linhas'] = total_linhas
+    df_normalizada['Importância (%)'] = importancia
+    
+    return df_normalizada
+    
 # Função de consistência de Saaty
 def DadosSaaty(lamb, N):
     ri = np.array([0, 0, 0.58, 0.9, 1.12, 1.32, 1.35, 1.41, 1.45, 1.49, 1.52, 1.54, 1.56, 1.58, 1.59])
@@ -106,6 +120,13 @@ else:
     st.subheader("1.2 - Normalizando a Matriz de Comparação")
     normalizada = NormalizingConsistency(df_matriz_comparacao)
     st.write(normalizada)
+
+    # Aplicando a função na matriz normalizada
+    df_com_importancia = calcular_importancia(normalizada)
+
+    # Exibindo a nova matriz com as colunas adicionais
+    st.subheader("1.3 - Matriz com Total das Linhas e Importância de Cada Critério")
+    st.write(df_com_importancia)
 
     # Cálculo de consistência
     st.subheader("1.3 - Verificação de Consistência")
