@@ -156,11 +156,11 @@ else:
         ax = sns.barplot(x=df_resultado.index, y=df_resultado["Peso Final"], data=df_resultado, palette="viridis")
 
         # Aumentando o tamanho das legendas dos eixos
-        #ax.set_xlabel("Alternativas", fontsize=18)  # Tamanho da fonte do eixo X
-        #ax.set_ylabel("Peso Final", fontsize=30)  # Tamanho da fonte do eixo Y
+        # ax.set_xlabel("Alternativas", fontsize=18)  # Tamanho da fonte do eixo X
+        # ax.set_ylabel("Peso Final", fontsize=30)  # Tamanho da fonte do eixo Y
         # Aumentar o tamanho da fonte das legendas dos eixos
         ax.tick_params(axis='x', labelsize=30)  # Tamanho da fonte para os rótulos do eixo X
-        ax.tick_params(axis='y', labelsize=30)  # Tamanho da fonte para os rótulos do eixo Y
+        #ax.tick_params(axis='y', labelsize=30)  # Tamanho da fonte para os rótulos do eixo Y
 
         for p in ax.patches:
             height = p.get_height()
