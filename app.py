@@ -4,7 +4,6 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-import imageio
 from matplotlib.animation import FuncAnimation
 sns.set(style="darkgrid")
 backgroundColor = "#ADD8E6"
@@ -246,25 +245,35 @@ else:
 
 
 
-def animate(i):
-    plt.clf()
-    sns.barplot(x=df_resultado.index, y=np.minimum(df_resultado["Peso Final"] * (i / 10), df_resultado["Peso Final"]),
-                palette="viridis")
+df_resultado = df_resultado.set_index('Alternativa')
+
+titulo_pesquisa = "Melhoria de Processo"  # Apenas um exemplo
+
+# Função para atualizar o gráfico em cada frame
+def update(num):
+    plt.clf()  # Limpa o gráfico para cada nova frame
+    plt.figure(figsize=(27, 8))  # Largura e altura do gráfico
     plt.title(f"Ranking para problema de: {titulo_pesquisa}", fontsize=36, pad=45)
-    plt.ylabel("Peso Final", fontsize=30)
-    plt.xticks(fontsize=30)
-    plt.yticks(fontsize=30)
-    
-    for idx, height in enumerate(np.minimum(df_resultado["Peso Final"] * (i / 10), df_resultado["Peso Final"])):
-        plt.text(idx, height + 0.01, '{:1.2f}'.format(height), ha='center', fontsize=34)
 
-# Criar animação
-titulo_pesquisa = "Minha Pesquisa"  # Título de exemplo
+    # Atualiza os dados com uma leve mudança para criar o efeito de animação
+    df_resultado['Peso Final'] = df_resultado['Peso Final'].sample(frac=1).reset_index(drop=True)
+
+    # Desenha o gráfico com as barras atualizadas
+    ax = sns.barplot(x=df_resultado.index, y=df_resultado["Peso Final"], palette="viridis")
+
+    # Aumenta o tamanho das legendas dos eixos
+    ax.set_ylabel("Peso Final", fontsize=30)  # Tamanho da fonte do eixo Y
+    ax.tick_params(axis='x', labelsize=30)  # Tamanho da fonte para os rótulos do eixo X
+    ax.tick_params(axis='y', labelsize=30)  # Tamanho da fonte para os rótulos do eixo Y
+
+    # Adiciona os valores em cima de cada barra
+    for p in ax.patches:
+        height = p.get_height()
+        ax.text(p.get_x() + p.get_width() / 2, height + 0.01, '{:1.2f}'.format(height), ha='center', fontsize=34)
+
+# Criando a animação
 fig = plt.figure(figsize=(27, 8))
-ani = FuncAnimation(fig, animate, frames=20, interval=200)
+anim = FuncAnimation(fig, update, frames=10, repeat=False)
 
-# Salvar a animação como GIF
-ani.save("grafico_animado.gif", writer="imagemagick")
-
-# Mostrar a animação no Streamlit
-st.image("grafico_animado.gif", caption="Gráfico Animado")
+# Exibir a animação no Streamlit
+st.pyplot(fig)
