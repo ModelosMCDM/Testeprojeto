@@ -21,9 +21,9 @@ html_temp = """
 
 <div style="text-align:center; background-color: #f0f0f0; border: 1px solid #ccc; padding: 10px;">
     <h3 style="color: black; margin-bottom: 10px;">Metodologia de apoio à decisão </h3>
-    <p style="color: black; margin-bottom: 10px;"">Modo de uso: Digite quantas alternativas e criterios para tomar decisão serão existentes. Na sequência complete com as opções </p>
+    <p style="color: black; margin-bottom: 10px;"">Modo de uso: Digite a quantidade de alternativas e critérios que você usará para a tomada de decisão. Em seguida, preencha as opções conforme necessário </p>
     <p style="color: black; margin-bottom: 10px;"">Com base na métodologia de Thomas Saaty - Por Jaqueline Alves </p>
-    <p style="color: black; margin-bottom: 10px;"">Todos os métodos funcionarão automaticamente</p>
+    <p style="color: black; margin-bottom: 10px;"">Todos os cálculos dos métodos irão funcionar automaticamente</p>
 </div>
 
 """
@@ -153,11 +153,11 @@ else:
         st.subheader("4. Resultado final")
         plt.figure(figsize=(27,4))  # largura e altura
         plt.title("Ranking das suas alternativas", fontsize=14)
-        ax = sns.barplot(x=df_resultado.index, y=df_resultado["Peso Final"], data=df_resultado)
+        ax = sns.barplot(x=df_resultado.index, y=df_resultado["Peso Final"], data=df_resultado, palette="viridis")
 
         for p in ax.patches:
             height = p.get_height()
-            ax.text(p.get_x() + p.get_width() / 2, height + 0.01, '{:1.2f}'.format(height), ha='center', fontsize=14)
+            ax.text(p.get_x() + p.get_width() / 2, height + 0.01, '{:1.2f}'.format(height), ha='center', fontsize=20)
 
         st.pyplot(plt)
 
