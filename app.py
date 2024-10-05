@@ -245,21 +245,23 @@ else:
 
 
 
-df_resultado = df_resultado.set_index('Alternativas')
+# Manter o DataFrame original intacto
+df_resultado_original = df_resultado.copy()
 
 titulo_pesquisa = "Melhoria de Processo"  # Apenas um exemplo
 
 # Função para atualizar o gráfico em cada frame
 def update(num):
-    plt.clf()  # Limpa o gráfico para cada nova frame
+    plt.clf()  # Limpa o gráfico para cada novo frame
     plt.figure(figsize=(27, 8))  # Largura e altura do gráfico
     plt.title(f"Ranking para problema de: {titulo_pesquisa}", fontsize=36, pad=45)
 
     # Atualiza os dados com uma leve mudança para criar o efeito de animação
-    df_resultado['Peso Final'] = df_resultado['Peso Final'].sample(frac=1).reset_index(drop=True)
+    df_temp = df_resultado_original.copy()  # Garante que a base original não seja alterada
+    df_temp['Peso Final'] = df_temp['Peso Final'] * (1 + 0.1 * num)  # Simulação de mudança nos dados
 
     # Desenha o gráfico com as barras atualizadas
-    ax = sns.barplot(x=df_resultado.index, y=df_resultado["Peso Final"], palette="viridis")
+    ax = sns.barplot(x=df_temp['Alternativa'], y=df_temp["Peso Final"], palette="viridis")
 
     # Aumenta o tamanho das legendas dos eixos
     ax.set_ylabel("Peso Final", fontsize=30)  # Tamanho da fonte do eixo Y
