@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+import imageio
 from matplotlib.animation import FuncAnimation
 sns.set(style="darkgrid")
 backgroundColor = "#ADD8E6"
@@ -244,7 +245,7 @@ else:
         st.error(f"Ocorreu um erro ao processar as comparações de alternativas: {e}")
 
 
-import imageio
+
 def animate(i):
     plt.clf()
     sns.barplot(x=df_resultado.index, y=np.minimum(df_resultado["Peso Final"] * (i / 10), df_resultado["Peso Final"]),
