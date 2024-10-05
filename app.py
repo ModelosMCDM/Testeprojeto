@@ -131,24 +131,24 @@ else:
     st.subheader("1.3 - Matriz com Total das Linhas e Importância de Cada Critério")
     st.write(df_com_importancia)
 
-#sns.set(style="whitegrid")
+    #sns.set(style="whitegrid")
 
     # Tamanho da figura
     plt.figure(figsize=(27, 8))
     ax = sns.barplot(x=df_com_importancia.index, y=df_com_importancia['Importância (%)'], palette="viridis")
-    plt.title("Importância de Cada Critério", fontsize=16, pad=20)
+    plt.title("Importância de Cada Critério", fontsize=36, pad=25)
 
-    ax.set_xlabel("Critérios", fontsize=14)
-    ax.set_ylabel("Importância (%)", fontsize=14)
+    ax.set_xlabel("Critérios", fontsize=18)
+    ax.set_ylabel("Importância (%)", fontsize=18)
 
     # Ajustando o tamanho dos rótulos dos eixos
-    ax.tick_params(axis='x', labelsize=12)
-    ax.tick_params(axis='y', labelsize=12)
+    ax.tick_params(axis='x', labelsize=30)
+    ax.tick_params(axis='y', labelsize=30)
 
     # Exibindo os valores de importância no topo de cada barra
     for p in ax.patches:
         height = p.get_height()
-        ax.text(p.get_x() + p.get_width() / 2., height + 0.5, '{:1.2f}'.format(height), ha="center", fontsize=12)
+        ax.text(p.get_x() + p.get_width() / 2., height + 0.5, '{:1.2f}'.format(height), ha="center", fontsize=34)
     
     # Exibir o gráfico
     st.pyplot(plt) 
@@ -221,7 +221,6 @@ else:
         for p in ax.patches:
             height = p.get_height()
             ax.text(p.get_x() + p.get_width() / 2, height + 0.01, '{:1.2f}'.format(height), ha='center', fontsize=34)
-
         st.pyplot(plt)  
 
     except Exception as e:
