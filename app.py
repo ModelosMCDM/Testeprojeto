@@ -115,6 +115,7 @@ else:
             matriz_comparacao_criterios[j, i] = 1 / valor_comparacao
 
     # Exibir a matriz gerada
+    st.markdown("Matriz de comparação dos pesos gerada", unsafe_allow_html=True)
     df_matriz_comparacao = pd.DataFrame(matriz_comparacao_criterios, index=criterios, columns=criterios)
     st.write(df_matriz_comparacao)
 
@@ -126,8 +127,7 @@ else:
     # Fazer uma cópia da matriz normalizada para uso posterior
     normalizada_copia = normalizada.copy()
 
-    st.markdown("Matriz de comparação dos pesos", unsafe_allow_html=True)
-    # Aplicando a função na matriz normalizada
+        # Aplicando a função na matriz normalizada
     df_com_importancia = calcular_importancia(normalizada_copia)
 
     # Exibindo a nova matriz com as colunas adicionais
