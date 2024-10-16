@@ -229,13 +229,10 @@ try:
         # Cálculo dos pesos finais (somatório das alternativas ponderadas pelos critérios)
         pesos_finais = np.sum(resultados_alternativas, axis=1)
         
-        # Adicionar a coluna 'Média dos Critérios' ao DataFrame final de resultados
-        df_resultado = pd.DataFrame(pesos_finais, index=alternativas, columns=["Peso Final"])
+        # Adicionar apenas a coluna 'Média dos Critérios' ao DataFrame final de resultados
+        df_resultado = pd.DataFrame(normalizada_alternativas['Média dos Critérios'], index=alternativas, columns=["Média dos Critérios"])
         
-        # Inclui a coluna de médias dos critérios no DataFrame final
-        df_resultado['Média dos Critérios'] = normalizada_alternativas['Média dos Critérios']
-        
-        # Exibir o DataFrame final com os pesos e a média dos critérios
+        # Exibir o DataFrame final apenas com a coluna de médias dos critérios
         st.write(df_resultado)
 
     #######AQUI
