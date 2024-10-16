@@ -209,29 +209,30 @@ try:
         df_matriz_alternativas = pd.DataFrame(matriz_alternativas, index=alternativas, columns=alternativas)
         st.write(f"Matriz de Comparação para o Critério {crit}")
         st.write(df_matriz_alternativas)
-
+#######AQUI
         # Normalizar a matriz de alternativas
         normalizada_alternativas = NormalizingConsistency(df_matriz_alternativas)  # Normaliza e verifica consistência
-        #st.write(f"Matriz Normalizada para o Critério {crit}")
-        #st.write(normalizada_alternativas)
-        # Calcular a média dos valores das alternativas para cada linha
-        normalizada_alternativas['Média'] = normalizada_alternativas.mean(axis=1)
-
+        
+        # Calcular a média dos valores dos critérios para cada alternativa
+        normalizada_alternativas['Média dos Critérios'] = normalizada_alternativas.mean(axis=1)
+        
         # Exibir a matriz com a nova coluna de médias
         st.write(f"Matriz Normalizada para o Critério {crit} com a coluna de médias")
         st.write(normalizada_alternativas)
-
+        
         # Cálculo dos pesos das alternativas para este critério
-        _, pesos_alternativas = VV(normalizada_alternativas.to_numpy())
-
+        _, pesos_alternativas = VV(normalizada_alternativas.drop(columns=['Média dos Critérios']).to_numpy())
+        
         # Armazenar os pesos das alternativas ponderados pelo peso do critério
         resultados_alternativas[:, crit_index] = pesos_alternativas * v[crit_index]
+        
+        # Cálculo dos pesos finais (somatório das alternativas ponderadas pelos critérios)
+        pesos_finais = np.sum(resultados_alternativas, axis=1)
+        df_resultado = pd.DataFrame(pesos_finais, index=alternativas, columns=["Peso Final"])
+        st.write(df_resultado)
 
-    # Cálculo dos pesos finais (somatório das alternativas ponderadas pelos critérios)
-    pesos_finais = np.sum(resultados_alternativas, axis=1)
-    df_resultado = pd.DataFrame(pesos_finais, index=alternativas, columns=["Peso Final"])
-    st.write(df_resultado)
-
+    #######AQUI
+    
     # Resultado final - gráfico
     st.subheader("4. Resultado final")
     plt.figure(figsize=(27,8))  # largura e altura
