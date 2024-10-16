@@ -4,7 +4,6 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-from matplotlib.animation import FuncAnimation
 sns.set(style="darkgrid")
 backgroundColor = "#ADD8E6"
 
@@ -129,10 +128,9 @@ else:
     # Entrada dos valores de comparação
     for i in range(num_criterios):
         for j in range(i + 1, num_criterios):
-            valor_comparacao = st.number_input(f"Para você, o quanto o critério {criterios[i]} é mais importante que  {criterios[j]} (escala 0.1-9)", min_value=0.01, max_value=9.00, step=0.01, format="%.2f")
+            valor_comparacao = st.number_input(f"Para você, o quanto o critério {criterios[i]} é mais importante que  {criterios[j]} (escala 1-9)", min_value=1, max_value=9)
             matriz_comparacao_criterios[i, j] = valor_comparacao
             matriz_comparacao_criterios[j, i] = 1 / valor_comparacao
-        
 
     # Exibir a matriz gerada
     st.markdown("Matriz de comparação dos pesos gerada", unsafe_allow_html=True)
@@ -203,7 +201,7 @@ else:
 
             for i in range(num_alternativas):
                 for j in range(i + 1, num_alternativas):
-                    valor_alternativa = st.number_input(f"O quão preferível é {alternativas[i]} é em relação à {alternativas[j]} para o critério {crit} (escala 0.1-9)", min_value=0.01, max_value=9.00, step=0.01, format="%.2f")
+                    valor_alternativa = st.number_input(f"O quão preferível é {alternativas[i]} é em relação à {alternativas[j]} para o critério {crit} (escala 1-9)", min_value=1, max_value=9)
                     matriz_alternativas[i, j] = valor_alternativa
                     matriz_alternativas[j, i] = 1 / valor_alternativa
 
@@ -240,7 +238,6 @@ else:
             height = p.get_height()
             ax.text(p.get_x() + p.get_width() / 2, height + 0.01, '{:1.2f}'.format(height), ha='center', fontsize=34)
         st.pyplot(plt)  
-
 
     except Exception as e:
         st.error(f"Ocorreu um erro ao processar as comparações de alternativas: {e}")
