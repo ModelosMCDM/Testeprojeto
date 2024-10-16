@@ -222,13 +222,20 @@ try:
         
         # Cálculo dos pesos das alternativas para este critério
         _, pesos_alternativas = VV(normalizada_alternativas.drop(columns=['Média dos Critérios']).to_numpy())
-        
+
         # Armazenar os pesos das alternativas ponderados pelo peso do critério
         resultados_alternativas[:, crit_index] = pesos_alternativas * v[crit_index]
         
         # Cálculo dos pesos finais (somatório das alternativas ponderadas pelos critérios)
         pesos_finais = np.sum(resultados_alternativas, axis=1)
+        
+        # Adicionar a coluna 'Média dos Critérios' ao DataFrame final de resultados
         df_resultado = pd.DataFrame(pesos_finais, index=alternativas, columns=["Peso Final"])
+        
+        # Inclui a coluna de médias dos critérios no DataFrame final
+        df_resultado['Média dos Critérios'] = normalizada_alternativas['Média dos Critérios']
+        
+        # Exibir o DataFrame final com os pesos e a média dos critérios
         st.write(df_resultado)
 
     #######AQUI
