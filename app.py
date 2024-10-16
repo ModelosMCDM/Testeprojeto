@@ -209,7 +209,7 @@ try:
         df_matriz_alternativas = pd.DataFrame(matriz_alternativas, index=alternativas, columns=alternativas)
         st.write(f"Matriz de Comparação para o Critério {crit}")
         st.write(df_matriz_alternativas)
-#######AQUI
+
         # Normalizar a matriz de alternativas
         normalizada_alternativas = NormalizingConsistency(df_matriz_alternativas)  # Normaliza e verifica consistência
         
@@ -235,6 +235,13 @@ try:
         # Exibir o DataFrame final apenas com a coluna de médias dos critérios
         st.write(df_resultado)
 
+    #######AQUI
+
+    # Criando uma cópia de df_com_importancia apenas com a primeira coluna e a última (Importância)
+    df_final = df_com_importancia.iloc[:, [0, -1]].copy()
+
+    # Exibir o DataFrame final com as alternativas e a coluna Importância
+    st.write(df_final)
     #######AQUI
     
     # Resultado final - gráfico
