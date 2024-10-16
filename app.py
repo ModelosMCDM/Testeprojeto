@@ -21,7 +21,7 @@ html_temp = """
          style="width: 250px; height: auto;">
 
 <div style="text-align:center; background-color: #f0f0f0; border: 1px solid #ccc; padding: 10px;">
-    <h3 style="color: black; margin-bottom: 10px;">Metodologia de apoio à decisão </h3>
+    <h3 style="color: black; margin-bottom: 10px;">Metodologia de apoio à decisão2 </h3>
     <p style="color: black; margin-bottom: 10px;"">Modo de uso: Digite a quantidade de alternativas e critérios que você usará para a tomada de decisão. Em seguida, preencha as opções conforme necessário </p>
     <p style="color: black; margin-bottom: 10px;"">Com base na métodologia de Thomas Saaty - Por Jaqueline Alves </p>
     <p style="color: black; margin-bottom: 10px;"">Código fonte, devidamente patenteado no INPI </p>
