@@ -237,13 +237,10 @@ try:
 
     #######AQUI
 
-    # Criar uma cópia de df_com_importancia apenas com a primeira coluna (alternativas) e a última (Importância)
-    df_final = df_com_importancia.iloc[:, [0, -1]].copy()
+    # Criar uma cópia de df_com_importancia apenas com a coluna "Importância (%)"
+    df_final = df_com_importancia[['Importância (%)']].copy()
     
-    # Renomear a primeira coluna para 'Alternativas' (se necessário, baseado na sua estrutura)
-    df_final.columns = ['Alternativas', 'Importância (%)']
-    
-    # Exibir o DataFrame final com as alternativas e a coluna Importância
+    # Exibir o DataFrame final apenas com a coluna "Importância (%)"
     st.write(df_final)
     #######AQUI
     
