@@ -214,14 +214,14 @@ try:
         normalizada_alternativas = NormalizingConsistency(df_matriz_alternativas)  # Normaliza e verifica consistência
         
         # Calcular a média dos valores dos critérios para cada alternativa
-        normalizada_alternativas['Média dos Critérios'] = normalizada_alternativas.mean(axis=1)
+        normalizada_alternativas['Peso Final'] = normalizada_alternativas.mean(axis=1)
         
         # Exibir a matriz com a nova coluna de médias
         st.write(f"Matriz Normalizada para o Critério {crit} com a coluna de médias")
         st.write(normalizada_alternativas)
         
         # Cálculo dos pesos das alternativas para este critério
-        _, pesos_alternativas = VV(normalizada_alternativas.drop(columns=['Média dos Critérios']).to_numpy())
+        _, pesos_alternativas = VV(normalizada_alternativas.drop(columns=['Peso Final']).to_numpy())
 
         # Armazenar os pesos das alternativas ponderados pelo peso do critério
         resultados_alternativas[:, crit_index] = pesos_alternativas * v[crit_index]
@@ -229,8 +229,8 @@ try:
         # Cálculo dos pesos finais (somatório das alternativas ponderadas pelos critérios)
         pesos_finais = np.sum(resultados_alternativas, axis=1)
         
-        # Adicionar apenas a coluna 'Média dos Critérios' ao DataFrame final de resultados
-        df_resultado = pd.DataFrame(normalizada_alternativas['Média dos Critérios'], index=alternativas, columns=["Média dos Critérios"])
+        # Adicionar apenas a coluna 'Peso Final' ao DataFrame final de resultados
+        df_resultado = pd.DataFrame(normalizada_alternativas['Peso Final'], index=alternativas, columns=["Peso Final"])
         
         # Exibir o DataFrame final apenas com a coluna de médias dos critérios
         st.write(df_resultado)
