@@ -129,9 +129,10 @@ else:
     # Entrada dos valores de comparação
     for i in range(num_criterios):
         for j in range(i + 1, num_criterios):
-            valor_comparacao = st.number_input(f"Para você, o quanto o critério {criterios[i]} é mais importante que  {criterios[j]} (escala 1-9)", min_value=1, max_value=9)
+            valor_comparacao = st.number_input(f"Para você, o quanto o critério {criterios[i]} é mais importante que  {criterios[j]} (escala 1-9)", min_value=1.0, max_value=9.0, step=0.1, format="%.1f")
             matriz_comparacao_criterios[i, j] = valor_comparacao
             matriz_comparacao_criterios[j, i] = 1 / valor_comparacao
+        
 
     # Exibir a matriz gerada
     st.markdown("Matriz de comparação dos pesos gerada", unsafe_allow_html=True)
