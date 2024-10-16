@@ -212,7 +212,13 @@ try:
 
         # Normalizar a matriz de alternativas
         normalizada_alternativas = NormalizingConsistency(df_matriz_alternativas)  # Normaliza e verifica consistência
-        st.write(f"Matriz Normalizada para o Critério {crit}")
+        #st.write(f"Matriz Normalizada para o Critério {crit}")
+        #st.write(normalizada_alternativas)
+        # Calcular a média dos valores das alternativas para cada linha
+        normalizada_alternativas['Média'] = normalizada_alternativas.mean(axis=1)
+
+        # Exibir a matriz com a nova coluna de médias
+        st.write(f"Matriz Normalizada para o Critério {crit} com a coluna de médias")
         st.write(normalizada_alternativas)
 
         # Cálculo dos pesos das alternativas para este critério
