@@ -275,7 +275,7 @@ try:
     st.write("Matriz Final com os Pesos Finais das Alternativas")
     st.write(df_resultado_final)
 
-    except Exception as e:
+except Exception as e:
     st.error(f"Ocorreu um erro: {e}")
 
    #######AQUI
