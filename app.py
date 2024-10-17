@@ -257,6 +257,7 @@ except Exception as e:
     st.error(f"Ocorreu um erro: {e}")
     #######AQUI
 
+st.subheader("produto da matriz de peso e matriz dos critérios")
 
    #######AQUI
     
@@ -280,27 +281,3 @@ except Exception as e:
 except Exception as e:
     st.error(f"Ocorreu um erro ao processar as comparações de alternativas: {e}")
 
-
-
-
-
-
-# Resultado final - gráfico
-    st.subheader("4. Resultado final")
-    plt.figure(figsize=(27,8))  # largura e altura
-    plt.title(f"Ranking para problema de: {titulo_pesquisa}", fontsize=36, pad=45)
-    ax = sns.barplot(x=df_resultado.index, y=df_resultado["Peso Final"], data=df_resultado, palette="viridis")
-
-    # Aumentando o tamanho das legendas dos eixos
-    ax.set_ylabel("Peso Final", fontsize=30)  # Tamanho da fonte do eixo Y
-    ax.tick_params(axis='x', labelsize=30)  # Tamanho da fonte para os rótulos do eixo X
-    ax.tick_params(axis='y', labelsize=30)  # Tamanho da fonte para os rótulos do eixo Y
-
-    for p in ax.patches:
-        height = p.get_height()
-        ax.text(p.get_x() + p.get_width() / 2, height + 0.01, '{:1.2f}'.format(height), ha='center', fontsize=34)
-
-    st.pyplot(plt)
-
-except Exception as e:
-    st.error(f"Ocorreu um erro ao processar as comparações de alternativas: {e}")
