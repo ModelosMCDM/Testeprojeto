@@ -253,8 +253,7 @@ try:
     st.write("Matriz Final com as Alternativas e Pesos Finais")
     st.write(df_priorizacao_alternativas)
     
-except Exception as e:
-    st.error(f"Ocorreu um erro: {e}")
+
     #######AQUI
     # Função para aplicar o equivalente a SOMARPRODUTO
     def somarproduto(df):
@@ -276,7 +275,8 @@ except Exception as e:
     st.write("Matriz Final com os Pesos Finais das Alternativas")
     st.write(df_resultado_final)
 
-
+    except Exception as e:
+        st.error(f"Ocorreu um erro: {e}")
 
    #######AQUI
     
