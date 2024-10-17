@@ -191,6 +191,9 @@ else:
 # Pergunta ao usuário as comparações para as alternativas
 st.subheader("2. Comparação das Alternativas - Preencha a matriz de priorização")
 
+# Lista para armazenar o peso final de cada alternativa para cada critério
+pesos_finais_por_criterio = pd.DataFrame()
+
 try:
     # Criação da matriz de resultados para todas as alternativas ponderadas pelos critérios
     resultados_alternativas = np.zeros((num_alternativas, num_criterios))
@@ -221,6 +224,9 @@ try:
         st.write(f"Matriz Normalizada para o Critério {crit} com a coluna de médias")
         st.write(normalizada_alternativas)
         
+        # Armazenar os pesos finais de cada critério em um DataFrame
+        pesos_finais_por_criterio[crit] = normalizada_alternativas['Peso Final']
+
         # Cálculo dos pesos das alternativas para este critério
         _, pesos_alternativas = VV(normalizada_alternativas.drop(columns=['Peso Final']).to_numpy())
 
@@ -236,13 +242,12 @@ try:
         # Exibir o DataFrame final apenas com a coluna de médias dos critérios
         st.write(df_resultado)
 
-
     # Criar uma cópia de df_com_importancia apenas com a coluna "Importância (%)"
     df_final = df_com_importancia[['Importância (%)']].copy()
 
-    # Adicionar ao df_final as colunas das alternativas com os valores de Peso Final
-    for alt_index, alt in enumerate(alternativas):
-        df_final[alt] = resultados_alternativas[alt_index, :]
+    # Adicionar ao df_final as colunas das alternativas com os valores de Peso Final de cada critério
+    for alt in alternativas:
+        df_final[alt] = pesos_finais_por_criterio.loc[alt]
 
     # Exibir o DataFrame final atualizado
     st.write("Matriz Final com as Alternativas e Pesos Finais")
