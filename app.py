@@ -276,7 +276,7 @@ try:
     st.write(df_resultado_final)
 
     except Exception as e:
-        st.error(f"Ocorreu um erro: {e}")
+    st.error(f"Ocorreu um erro: {e}")
 
    #######AQUI
     
