@@ -242,22 +242,6 @@ try:
         # Exibir o DataFrame final apenas com a coluna de médias dos critérios
         st.write(df_resultado)
 
-   # Criar uma cópia de df_com_importancia apenas com a coluna "Importância (%)"
-    df_final = df_com_importancia[['Importância (%)']].copy()
-
-    # Adicionar ao df_final as colunas das alternativas com os valores de Peso Final de cada critério
-    for alt in alternativas:
-        df_final[alt] = pesos_finais_por_criterio.loc[alt]
-
-    # Aplicar a fórmula SOMARPRODUTO (numpy.dot) para calcular a soma ponderada
-    # A coluna "Importância (%)" será multiplicada pelas colunas de alternativas
-    for alt in alternativas:
-        # Multiplicando a coluna "Importância (%)" pelos pesos de cada alternativa
-        df_final[f"Soma {alt}"] = np.dot(df_final['Importância (%)'].values, df_final[alt].values)
-
-    # Exibir o DataFrame final atualizado com a soma ponderada das alternativas
-    st.write("Matriz Final com as Alternativas e Pesos Finais")
-    st.write(df_final)
 
 except Exception as e:
     st.error(f"Ocorreu um erro: {e}")
