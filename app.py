@@ -187,6 +187,7 @@ else:
         st.write("Autovalor (l):", l)
         st.write("Autovetor (v):", ' '.join(map(str, v)))
 
+#################aqui
 # Pergunta ao usuário as comparações para as alternativas
 st.subheader("2. Comparação das Alternativas - Preencha a matriz de priorização")
 
@@ -235,14 +236,24 @@ try:
         # Exibir o DataFrame final apenas com a coluna de médias dos critérios
         st.write(df_resultado)
 
-    #######AQUI
 
     # Criar uma cópia de df_com_importancia apenas com a coluna "Importância (%)"
     df_final = df_com_importancia[['Importância (%)']].copy()
-    
-    # Exibir o DataFrame final apenas com a coluna "Importância (%)"
+
+    # Adicionar ao df_final as colunas das alternativas com os valores de Peso Final
+    for alt_index, alt in enumerate(alternativas):
+        df_final[alt] = resultados_alternativas[alt_index, :]
+
+    # Exibir o DataFrame final atualizado
+    st.write("Matriz Final com as Alternativas e Pesos Finais")
     st.write(df_final)
+
+except Exception as e:
+    st.error(f"Ocorreu um erro: {e}")
     #######AQUI
+
+
+   #######AQUI
     
     # Resultado final - gráfico
     st.subheader("4. Resultado final")
