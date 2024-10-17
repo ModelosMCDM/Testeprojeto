@@ -242,38 +242,20 @@ try:
         # Exibir o DataFrame final apenas com a coluna de médias dos critérios
         st.write(df_resultado)
 
-#######AQUI
-# Criar uma cópia de df_com_importancia apenas com a coluna "Importância (%)"
+    # Criar uma cópia de df_com_importancia apenas com a coluna "Importância (%)"
     df_final = df_com_importancia[['Importância (%)']].copy()
 
     # Adicionar ao df_final as colunas das alternativas com os valores de Peso Final de cada critério
     for alt in alternativas:
-        df_final[alt] = pesos_finais_por_criterio[alt]
+        df_final[alt] = pesos_finais_por_criterio.loc[alt]
 
-    # Exibir o DataFrame final atualizado com as colunas das alternativas
+    # Exibir o DataFrame final atualizado
     st.write("Matriz Final com as Alternativas e Pesos Finais")
     st.write(df_final)
 
-    # Cálculo da soma do produto (SOMARPRODUTO no Excel)
-    # Para cada alternativa, calcular a soma do produto da coluna de Importância (%) com as colunas das alternativas
-    soma_produto = {}
-    importancias = df_final['Importância (%)'].values / 100  # Transformando porcentagem em valor decimal
-
-    for alt in alternativas:
-        col_values = df_final[alt].values
-        soma_produto[alt] = np.dot(importancias, col_values)
-
-    # Criar DataFrame para exibir as somas finais de cada alternativa
-    df_soma_produto = pd.DataFrame([soma_produto], index=['SOMA'])
-
-    # Exibir a matriz final com as somas dos produtos
-    st.write("Soma do Produto de Importância (%) com as Alternativas")
-    st.write(df_soma_produto)
-#######AQUI
 except Exception as e:
     st.error(f"Ocorreu um erro: {e}")
-
-
+    #######AQUI
 
 
    #######AQUI
