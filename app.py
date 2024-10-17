@@ -243,20 +243,38 @@ try:
         st.write(df_resultado)
 
     # Criar uma cópia de df_com_importancia apenas com a coluna "Importância (%)"
-    df_final = df_com_importancia[['Importância (%)']].copy()
+    df_priorizacao_alternativas = df_com_importancia[['Importância (%)']].copy()
 
-    # Adicionar ao df_final as colunas das alternativas com os valores de Peso Final de cada critério
+    # Adicionar ao df_priorizacao_alternativas as colunas das alternativas com os valores de Peso Final de cada critério
     for alt in alternativas:
-        df_final[alt] = pesos_finais_por_criterio.loc[alt]
+        df_priorizacao_alternativas[alt] = pesos_finais_por_criterio.loc[alt]
 
     # Exibir o DataFrame final atualizado
     st.write("Matriz Final com as Alternativas e Pesos Finais")
-    st.write(df_final)
+    st.write(df_priorizacao_alternativas)
     
 except Exception as e:
     st.error(f"Ocorreu um erro: {e}")
     #######AQUI
-
+    # Função para aplicar o equivalente a SOMARPRODUTO
+    def somarproduto(df):
+        # Multiplica a coluna "Importância (%)" por cada coluna de alternativa
+        return (df['Importância (%)'].values[:, np.newaxis] * df.drop(columns=['Importância (%)']).values).sum(axis=0)
+    
+    # Criar uma cópia de df_priorizacao_alternativas apenas com a coluna "Importância (%)" e as alternativas
+    df_priorizacao_alternativas = df_com_importancia[['Importância (%)']].copy()
+    
+    # Adicionar ao df_priorizacao_alternativas as colunas das alternativas com os valores de Peso Final de cada critério
+    for alt in alternativas:
+        df_priorizacao_alternativas[alt] = pesos_finais_por_criterio.loc[alt]
+    
+    # Aplica a função de somar produto para calcular o peso final de cada alternativa
+    pesos_finais_alternativas = somarproduto(df_priorizacao_alternativas)
+    
+    # Exibir o DataFrame final atualizado com os pesos finais
+    df_resultado_final = pd.DataFrame(pesos_finais_alternativas, index=alternativas, columns=["Peso Final"])
+    st.write("Matriz Final com os Pesos Finais das Alternativas")
+    st.write(df_resultado_final)
 
 
 
