@@ -253,8 +253,6 @@ try:
     st.write("Matriz Final com as Alternativas e Pesos Finais")
     st.write(df_final)
     
-st.subheader("produto da matriz de peso e matriz dos critérios")
-
 except Exception as e:
     st.error(f"Ocorreu um erro: {e}")
     #######AQUI
@@ -266,6 +264,7 @@ except Exception as e:
     
     # Resultado final - gráfico
     st.subheader("4. Resultado final")
+    st.subheader("produto da matriz de peso e matriz dos critérios")
     plt.figure(figsize=(27,8))  # largura e altura
     plt.title(f"Ranking para problema de: {titulo_pesquisa}", fontsize=36, pad=45)
     ax = sns.barplot(x=df_resultado.index, y=df_resultado["Peso Final"], data=df_resultado, palette="viridis")
