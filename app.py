@@ -242,16 +242,6 @@ try:
         # Exibir o DataFrame final apenas com a coluna de médias dos critérios
         st.write(df_resultado)
 
-    # Criar uma cópia de df_com_importancia apenas com a coluna "Importância (%)"
-    df_final = df_com_importancia[['Importância (%)']].copy()
-
-    # Adicionar ao df_final as colunas das alternativas com os valores de Peso Final de cada critério
-    for alt in alternativas:
-        df_final[alt] = pesos_finais_por_criterio.loc[alt]
-
-    # Exibir o DataFrame final atualizado
-    st.write("Matriz Final com as Alternativas e Pesos Finais")
-    st.write(df_final)
 #######AQUI
 # Criar uma cópia de df_com_importancia apenas com a coluna "Importância (%)"
     df_final = df_com_importancia[['Importância (%)']].copy()
